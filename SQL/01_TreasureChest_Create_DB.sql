@@ -10,7 +10,7 @@ GO
 DROP TABLE IF EXISTS [Follow];
 DROP TABLE IF EXISTS [Users];
 DROP TABLE IF EXISTS [Favorites];
-DROP TABLE IF EXISTS [Items];
+DROP TABLE IF EXISTS [Posts];
 DROP TABLE IF EXISTS [Categories];
 GO
 
@@ -34,7 +34,7 @@ CREATE TABLE [Users] (
      CONSTRAINT UQ_FirebaseUserId UNIQUE(FirebaseUserId)
 )
 GO
-CREATE TABLE [Items] (
+CREATE TABLE [Posts] (
      [Id] integer PRIMARY KEY IDENTITY,
      [Name] nvarchar(50) NOT NULL,
      [Description] text NOT NULL,
@@ -44,14 +44,14 @@ CREATE TABLE [Items] (
      [PostDateTime] datetime NOT NULL,
      [IsPurchased] bit default(0) not null,
      [CategoryId] Integer NOT NULL 
-     CONSTRAINT [FK_Items_Users] FOREIGN KEY ([SellerId]) REFERENCES [Users] ([Id])
+     CONSTRAINT [FK_Posts_Users] FOREIGN KEY ([SellerId]) REFERENCES [Users] ([Id])
 )
 GO
 CREATE TABLE [Favorites] (
     [Id] integer PRIMARY KEY IDENTITY,
     [ItemId] integer NOT NULL,
     [UserId] integer NOT NULL,
-    CONSTRAINT [FK_Favorites_Items] FOREIGN KEY ([ItemId]) REFERENCES [Items] ([Id]),
+    CONSTRAINT [FK_Favorites_Posts] FOREIGN KEY ([ItemId]) REFERENCES [Posts] ([Id]),
     CONSTRAINT [FK_Favorites_Users] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id])
 
 )
@@ -64,7 +64,7 @@ CREATE TABLE [Categories] (
 
 
 GO
-ALTER TABLE [Items]
+ALTER TABLE [Posts]
 Add FOREIGN KEY ([CategoryId]) REFERENCES [Categories] ([Id])
 GO
 ALTER TABLE [Follow] ADD FOREIGN KEY ([CurrentUserId]) REFERENCES [Users] ([Id])
