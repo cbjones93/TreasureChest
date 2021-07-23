@@ -10,5 +10,6 @@ namespace TreasureChest.Repositories
     {
         public Post GetPostById(int id);
         public List<Post> GetAllPosts();
+        public void AddPost(Post post);
     }
 }
