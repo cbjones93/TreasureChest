@@ -49,8 +49,9 @@ public class UserController : ControllerBase
         [HttpPost]
         public IActionResult Register(User user)
         {
+            user.CreateDateTime = DateTime.Now;
             // All newly registered users start out as a "user" user type (i.e. they are not admins)
-           _userRepository.Add(user);
+            _userRepository.Add(user);
             return CreatedAtAction(
                 nameof(GetByFirebaseUserId), new { firebaseUserId = user.FirebaseUserId }, user);
         }

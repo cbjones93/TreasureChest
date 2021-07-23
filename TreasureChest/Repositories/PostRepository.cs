@@ -59,6 +59,29 @@ namespace TreasureChest.Repositories
 
         }
 
+       public void AddPost(Post post)
+        {
+            using (var conn= Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                INSERT INTO POSTS ([Name], [Description], ImageLocation, Price, SellerId, PostDateTime, IsPurchased, CategoryId)
+                                    OUTPUT INSERTED.ID
+                                    VALUES (@Name, @Description, @ImageLocation, @Price, @SellerId, @PostDateTime, 0, @CategoryId)";
+                    DbUtils.AddParameter(cmd, "@Name", post.Name);
+                    DbUtils.AddParameter(cmd, "@Description", post.Description);
+                    DbUtils.AddParameter(cmd, "@ImageLocation", post.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@Price", post.Price);
+                    DbUtils.AddParameter(cmd, "@SellerId", post.SellerId);
+                    DbUtils.AddParameter(cmd, "@PostDateTime", post.PostDateTime);
+                    DbUtils.AddParameter(cmd, "@CategoryId", post.CategoryId);
+
+                    post.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
         public List<Post> GetAllPosts()
         {
             using (var conn = Connection)
