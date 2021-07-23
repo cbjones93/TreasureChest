@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router';
 import { getPostById } from "../../modules/postManager.js";
 import { Link } from "react-router-dom";
 
-export const PostDetail = () => {
+const PostDetail = () => {
     const { id } = useParams();
     const [post, setPost] = useState({});
     const history = useHistory();
@@ -22,11 +22,16 @@ export const PostDetail = () => {
     return (
         <Card>
             <CardBody>
-                <p>Hello!</p>
                 <p>
                     <strong>{post.name}</strong>
                 </p>
+                <img src={post.imageLocation} alt={post.name}/>
+                <p>{post.description}</p>
+                <p>${post.price}</p>
+                <p>Category: {post.category?.name}</p>
+
             </CardBody>
         </Card>
     )
 }
+export default PostDetail
