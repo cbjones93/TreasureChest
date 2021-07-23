@@ -9,5 +9,6 @@ namespace TreasureChest.Repositories
     public interface IPostRepository
     {
         public Post GetPostById(int id);
+        public List<Post> GetAllPosts();
     }
 }

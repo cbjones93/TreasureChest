@@ -74,5 +74,28 @@ namespace TreasureChest.Repositories
             }
 
         }
+
+        public void Add(User user)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO User (FirebaseUserId, firstname, lastname, email, address, createdatetime, imagelocation )
+                                        OUTPUT INSERTED.ID
+                                        VALUES (@FirebaseUserId, @firstname, @lastname, @email, @address, @createdatetime, @imagelocation)";
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", user.FirebaseUserId);
+                    DbUtils.AddParameter(cmd, "@FirstName", user.FirstName);
+                    DbUtils.AddParameter(cmd, "@LastName", user.LastName);
+                    DbUtils.AddParameter(cmd, "@Email", user.Email);
+                    DbUtils.AddParameter(cmd, "@address", user.Address);
+                    DbUtils.AddParameter(cmd, "@CreateDateTime", user.CreateDateTime);
+                    DbUtils.AddParameter(cmd, "@ImageLocation", user.ImageLocation);
+
+                    user.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
     }
 }
