@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TreasureChest.Models;
 using TreasureChest.Repositories;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -33,22 +34,29 @@ public class UserController : ControllerBase
         return Ok(userProfile);
     }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("DoesUserExist/{firebaseUserId}")]
+        public IActionResult DoesUserExist(string firebaseUserId)
         {
-            var user = _userRepository.GetById(id);
-            return Ok(user);
+            var userProfile = _userRepository.GetByFirebaseId(firebaseUserId);
+            if (userProfile == null)
+            {
+                return NotFound();
+            }
+            return Ok();
         }
 
         // POST api/<UserController>
         [HttpPost]
-    public void Post([FromBody] string value)
-    {
-    }
+        public IActionResult Register(User user)
+        {
+            // All newly registered users start out as a "user" user type (i.e. they are not admins)
+           _userRepository.Add(user);
+            return CreatedAtAction(
+                nameof(GetByFirebaseUserId), new { firebaseUserId = user.FirebaseUserId }, user);
+        }
 
-    // PUT api/<UserController>/5
-    [HttpPut("{id}")]
+        // PUT api/<UserController>/5
+        [HttpPut("{id}")]
     public void Put(int id, [FromBody] string value)
     {
     }
