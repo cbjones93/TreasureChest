@@ -39,3 +39,20 @@ export const createPost = (post) => {
         });
     });
 }
+export const getPostById = (id) => {
+    return getToken().then((token) => {
+        return fetch(`${baseUrl}/${id}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(resp => {
+            console.log(resp)
+            if (resp.ok) {
+                return resp.json();
+            } else {
+                throw new Error("An unknown error occurred while trying to delete post.");
+            }
+        });
+    });
+};

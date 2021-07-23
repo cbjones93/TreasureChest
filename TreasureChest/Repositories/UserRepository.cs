@@ -82,7 +82,7 @@ namespace TreasureChest.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO User (FirebaseUserId, firstname, lastname, email, address, createdatetime, imagelocation )
+                    cmd.CommandText = @"INSERT INTO Users (FirebaseUserId, firstname, lastname, email, address, createdatetime, imagelocation )
                                         OUTPUT INSERTED.ID
                                         VALUES (@FirebaseUserId, @firstname, @lastname, @email, @address, @createdatetime, @imagelocation)";
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", user.FirebaseUserId);

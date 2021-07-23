@@ -6,8 +6,10 @@ import { register } from "../modules/authManager";
 export default function Register() {
   const history = useHistory();
 
-  const [name, setName] = useState();
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
+  const [address, setAddress] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
 
@@ -16,7 +18,7 @@ export default function Register() {
     if (password && password !== confirmPassword) {
       alert("Passwords don't match. Do better.");
     } else {
-      const userProfile = { name, email };
+      const userProfile = { firstName, lastName, address, email };
       register(userProfile, password)
         .then(() => history.push("/"));
     }
@@ -26,12 +28,20 @@ export default function Register() {
     <Form onSubmit={registerClick}>
       <fieldset>
         <FormGroup>
-          <Label htmlFor="name">Name</Label>
-          <Input id="name" type="text" autoFocus onChange={e => setName(e.target.value)} />
+          <Label htmlFor="firstName">First Name</Label>
+          <Input id="firstName" type="text" autoFocus onChange={e => setFirstName(e.target.value)} />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="lastName">Last Name</Label>
+          <Input id="lastName" type="text" autoFocus onChange={e => setLastName(e.target.value)} />
         </FormGroup>
         <FormGroup>
           <Label for="email">Email</Label>
           <Input id="email" type="text" onChange={e => setEmail(e.target.value)} />
+        </FormGroup>
+        <FormGroup>
+          <Label for="address">Address</Label>
+          <Input id="address" type="text" onChange={e => setAddress(e.target.value)} />
         </FormGroup>
         <FormGroup>
           <Label for="password">Password</Label>
