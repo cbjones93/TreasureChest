@@ -11,7 +11,6 @@ const PostDetail = (props) => {
     const { id } = useParams();
     const [post, setPost] = useState({});
     const history = useHistory();
-    debugger
     console.log(props.activeUser.id)
     const handleDeletePost = (id) => {
         window.confirm(`Are you sure you want to delete ${post.name}?`);
