@@ -2,8 +2,9 @@ import React from "react";
 import { Card, CardBody } from "reactstrap";
 import { Link, useHistory } from "react-router-dom";
 
-const Post = ({ post, showEditAndDelete }) => {
+const Post = ({ post }) => {
   const history = useHistory()
+
   if (post.isPurchased === false) {
     return (
         <Card >

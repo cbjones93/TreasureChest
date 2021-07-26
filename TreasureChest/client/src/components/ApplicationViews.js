@@ -4,23 +4,24 @@ import Login from "./Login";
 import Register from "./Register";
 import PostList from "./Posts/PostList";
 import PostForm from "./Posts/PostForm";
-import PostDetail  from "./Posts/PostDetails";
+import PostDetail from "./Posts/PostDetails";
 import PostEdit from "./Posts/PostEditForm";
-import {getCurrentUser} from "../modules/authManager";
+import { getCurrentUser } from "../modules/authManager";
+import FollowList from "./Follow/FollowList";
 
 export default function ApplicationViews({ isLoggedIn }) {
-const [activeUser, setActiveUser] = useState({});
+  const [activeUser, setActiveUser] = useState({});
 
 
-useEffect (() =>{
-  if(isLoggedIn) {
-   getCurrentUser()
-   .then((user)  => {
-    setActiveUser(user)
-    console.log(user)
-  })
-  }
-}, [])
+  useEffect(() => {
+    if (isLoggedIn) {
+      getCurrentUser()
+        .then((user) => {
+          setActiveUser(user)
+          console.log(user)
+        })
+    }
+  }, [])
 
   return (
     <main>
@@ -41,21 +42,25 @@ useEffect (() =>{
         </Route>
 
         <Route path="/posts/details/:id" exact>
-        <PostDetail activeUser = {activeUser} />
-      </Route>
-      <Route path="/posts/edit/:id" exact>
-        <PostEdit activeUser = {activeUser} />
-      </Route>
+          <PostDetail activeUser={activeUser} />
+        </Route>
+        <Route path="/posts/edit/:id" exact>
+          <PostEdit activeUser={activeUser} />
+        </Route>
 
 
-      <Route path="/login">
-        <Login />
-      </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
 
-      <Route path="/register">
-        <Register />
-      </Route>
-        </Switch>
+        <Route path="/favoriteUsers">
+          <FollowList activeUser={activeUser}/>
+        </Route>
+
+        <Route path="/register">
+          <Register />
+        </Route>
+      </Switch>
     </main >
-      );
+  );
 };
