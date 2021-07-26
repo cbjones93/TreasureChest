@@ -31,11 +31,14 @@ export default function Header({ isLoggedIn }) {
           {isLoggedIn &&
             <>
               <NavItem>
-                <a aria-current="page" className="nav-link"
-                  style={{ cursor: "pointer" }} onClick={logout}>Logout</a>
+              <NavLink tag={RRNavLink} to="/posts">Posts</NavLink>
               </NavItem>
               <NavItem>
-              <NavLink tag={RRNavLink} to="/posts">Posts</NavLink>
+              <NavLink tag={RRNavLink} to="/favoriteUsers">Your Favorite Sellers</NavLink>
+              </NavItem>
+              <NavItem>
+                <a aria-current="page" className="nav-link"
+                  style={{ cursor: "pointer" }} onClick={logout}>Logout</a>
               </NavItem>
             </>
           }
