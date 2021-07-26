@@ -1,9 +1,10 @@
 import React from "react";
 import { Card, CardBody } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-const Post = ({ post }) => {
-  
+const Post = ({ post, showEditAndDelete }) => {
+  const history = useHistory()
+  if (post.isPurchased === false) {
     return (
         <Card >
             < CardBody >
@@ -16,9 +17,16 @@ const Post = ({ post }) => {
                 <button>
                     <Link to={`/posts/details/${post.id}`}>view details</Link>
                 </button>
+               
             </CardBody >
         </Card >
     );
+  }
+  else {
+      return (
+          <></>
+      )
+  }
 };
 export default Post;
 
