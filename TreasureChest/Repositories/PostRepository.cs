@@ -17,7 +17,7 @@ namespace TreasureChest.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT p.Id as Id, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.IsPurchased, u.id as userId, u.firstname, u.lastname, c.id as CatId, c.[name] as categoryName FROM Posts P 
+                    SELECT p.Id as Id, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.SellerId, p.IsPurchased, u.id as userId, u.firstname, u.lastname, c.id as CatId, c.[name] as categoryName FROM Posts P 
                         LEFT JOIN Users u on p.sellerid = u.id
                         LEFT JOIN Categories c on p.CategoryId = c.id 
                         WHERE p.Id = @id";
@@ -34,6 +34,7 @@ namespace TreasureChest.Repositories
                             Description = DbUtils.GetString(reader, "description"),
                             ImageLocation = DbUtils.GetString(reader, "imagelocation"),
                             Price = DbUtils.GetInt(reader, "price"),
+                            SellerId = DbUtils.GetInt(reader, "sellerId"),
                             PostDateTime = DbUtils.GetDateTime(reader, "postdatetime"),
                             IsPurchased = reader.GetBoolean(reader.GetOrdinal("ispurchased")),
                             Category = new Category()
@@ -59,9 +60,9 @@ namespace TreasureChest.Repositories
 
         }
 
-       public void AddPost(Post post)
+        public void AddPost(Post post)
         {
-            using (var conn= Connection)
+            using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
@@ -126,5 +127,102 @@ namespace TreasureChest.Repositories
                 }
             }
         }
+        public void Delete(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE POSTS
+                                        SET IsPurchased = 1
+                                        WHERE Id = @id
+                                        ";
+                    //DbUtils.AddParameter(cmd, "@firebaseUserId", firebaseUserId);
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+
+        public List<Post> GetPostsByUser(string firebaseUserId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    SELECT p.Id as Id, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.IsPurchased, u.id as userId, u.firstname, u.lastname u.firebaseUserId, c.id as CatId, c.[name] as categoryName FROM Posts P 
+                        LEFT JOIN Users u on p.sellerid = u.id
+                        LEFT JOIN Categories c on p.CategoryId = c.id
+                        WHERE firebaseuserId = @firebaseuserid AND p.isPurchased = 0
+                        ORDER BY p.PostDateTime DESC";
+                    DbUtils.AddParameter(cmd, "@firebaseuserid", firebaseUserId);
+                    var reader = cmd.ExecuteReader();
+
+                    var posts = new List<Post>();
+                    while (reader.Read())
+                    {
+                        posts.Add(new Post()
+                        {
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            Name = DbUtils.GetString(reader, "postName"),
+                            Description = DbUtils.GetString(reader, "description"),
+                            ImageLocation = DbUtils.GetString(reader, "imagelocation"),
+                            Price = DbUtils.GetInt(reader, "price"),
+                            PostDateTime = DbUtils.GetDateTime(reader, "postdatetime"),
+                            IsPurchased = reader.GetBoolean(reader.GetOrdinal("ispurchased")),
+                            Category = new Category()
+                            {
+                                Id = DbUtils.GetInt(reader, "catId"),
+                                Name = DbUtils.GetString(reader, "categoryName")
+                            },
+                            User = new User()
+                            {
+                                Id = DbUtils.GetInt(reader, "userId"),
+                                FirstName = DbUtils.GetString(reader, "firstname"),
+                                LastName = DbUtils.GetString(reader, "lastname")
+                            },
+                        });
+
+                    }
+                    reader.Close();
+                    return posts;
+                }
+            }
+        }
+
+        public void Update(Post post)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                UPDATE Posts
+                                SET [Name] = @name,
+                                    Description = @description,
+                                    ImageLocation = @imageLocation,
+                                    Price = @price,
+                                    CategoryId = @categoryId
+                                WHERE Id =@id";
+                    DbUtils.AddParameter(cmd, "@name", post.Name);
+                    DbUtils.AddParameter(cmd, "@id", post.Id);
+                    DbUtils.AddParameter(cmd, "@description", post.Description);
+                    DbUtils.AddParameter(cmd, "@imageLocation", post.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@price", post.Price);
+                    DbUtils.AddParameter(cmd, "@categoryId", post.CategoryId);
+
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+
+
     }
 }

@@ -36,6 +36,18 @@ namespace TreasureChest.Controllers
             var post = _postRepository.GetPostById(id);
             return Ok(post);
         }
+        [HttpGet("myPosts/")]
+        public IActionResult GetPostsByUser()
+        {
+            string currentUserProfileId = GetCurrentFirebaseUserProfileId();
+            var posts = _postRepository.GetPostsByUser(currentUserProfileId);
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return Ok(posts);
+        }
+
 
         // POST api/<PostController>
         [HttpPost]
@@ -50,16 +62,30 @@ namespace TreasureChest.Controllers
 
         // PUT api/<PostController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, Post post)
         {
+            if (id != post.Id)
+            {
+                return BadRequest();
+            }
+            _postRepository.Update(post);
+            return NoContent();
         }
 
         // DELETE api/<PostController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            //string currentUserProfileId = GetCurrentFirebaseUserProfileId();
+            _postRepository.Delete(id);
+            return NoContent();
         }
 
+        private string GetCurrentFirebaseUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return id;
+        }
         private User GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;

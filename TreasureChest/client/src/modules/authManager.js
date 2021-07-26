@@ -3,7 +3,6 @@ import "firebase/auth";
 
 const _apiUrl = "/api/user";
 
-
 const _doesUserExist = (firebaseUserId) => {
   return getToken().then((token) =>
     fetch(`${_apiUrl}/DoesUserExist/${firebaseUserId}`, {
@@ -35,7 +34,15 @@ export const getToken = () => {
   return currentUser.getIdToken();
 };
 
-
+export const getCurrentUser = () => {
+  return getToken().then((token) =>
+    fetch(`${_apiUrl}/getCurrentUser`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(resp => resp.json()));
+}
 
 export const login = (email, pw) => {
   return firebase.auth().signInWithEmailAndPassword(email, pw)
