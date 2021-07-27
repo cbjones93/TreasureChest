@@ -97,5 +97,33 @@ namespace TreasureChest.Repositories
                 }
             }
         }
+
+        public void Update(User user)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                        UPDATE Users
+                                        SET firstName = @firstName,
+                                            lastName = @lastName,
+                                            email = @email,
+                                            address = @address,
+                                            imageLocation = @imageLocation
+                                            WHERE Id =@id";
+                    DbUtils.AddParameter(cmd, "@firstName", user.FirstName);
+                    DbUtils.AddParameter(cmd, "@lastName", user.LastName);
+                    DbUtils.AddParameter(cmd, "@email", user.Email);
+                    DbUtils.AddParameter(cmd, "@address", user.Address);
+                    DbUtils.AddParameter(cmd, "@imageLocation", user.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@id", user.Id);
+                    cmd.ExecuteNonQuery();
+
+
+                }
+            }
+        }
     }
 }

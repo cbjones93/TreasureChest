@@ -12,6 +12,7 @@ const PostDetail = (props) => {
     const [post, setPost] = useState({});
     const history = useHistory();
     console.log(props.activeUser.id)
+    
     const handleDeletePost = (id) => {
         window.confirm(`Are you sure you want to delete ${post.name}?`);
         deletePost(id)
@@ -33,6 +34,7 @@ const PostDetail = (props) => {
                     <strong>{post.name}</strong>
                 </p>
                 <img src={post.imageLocation} alt={post.name} />
+                <Link to={`../../users/${post.sellerId}`}><h5>By: {post.user?.firstName} {post.user?.lastName}</h5></Link>
                 <p>{post.description}</p>
                 <p>${post.price}</p>
                 <p>Category: {post.category?.name}</p>

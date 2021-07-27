@@ -11,5 +11,6 @@ namespace TreasureChest.Repositories
         public User GetByFirebaseId(string firebaseUserId);
         public User GetById(int id);
         public void Add(User user);
+        public void Update(User user);
     }
 }

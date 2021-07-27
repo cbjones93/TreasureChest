@@ -33,15 +33,20 @@ namespace TreasureChest.Controllers
 
         // GET api/<FollowController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var follow = _followRepository.GetAllFollowsByUserId(id);
+            return Ok(follow);
         }
 
         // POST api/<FollowController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(Follow follow)
         {
+            var currentUserProfile = GetCurrentUserProfile();
+            follow.currentUserId = currentUserProfile.Id;
+            _followRepository.Add(follow);
+            return CreatedAtAction(nameof(GetAll), new { id = follow.Id }, follow);
         }
 
         // PUT api/<FollowController>/5
@@ -54,6 +59,14 @@ namespace TreasureChest.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _followRepository.Delete(id);
+           
+        }
+
+        private User GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userRepository.GetByFirebaseId(firebaseUserId);
         }
     }
 }
