@@ -10,6 +10,7 @@ import { getCurrentUser } from "../modules/authManager";
 import FollowList from "./Follow/FollowList";
 import MyAccount from "./User/myAccountCard";
 import UserAccount from "./User/userAccountCard"
+import { UserEdit } from "./User/myAccountEditForm";
 
 export default function ApplicationViews({ isLoggedIn }) {
   const [activeUser, setActiveUser] = useState({});
@@ -43,10 +44,13 @@ export default function ApplicationViews({ isLoggedIn }) {
           <PostForm />
         </Route>
 
-        <Route path="/myaccount">
+        <Route path="/myaccount" exact>
           <MyAccount activeUser={activeUser} />
           <FollowList activeUser={activeUser}/>
         </Route>
+        <Route path= "/myaccount/edit">
+          <UserEdit activeUser={activeUser}/>
+          </Route>
 
         <Route path="/posts/details/:id" exact>
           <PostDetail activeUser={activeUser} />

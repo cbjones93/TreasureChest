@@ -3,6 +3,27 @@ import "firebase/auth";
 
 const _apiUrl = "/api/user";
 
+export const editUser = (user) => {
+  return getToken().then((token) => {
+      return fetch(`${_apiUrl}/${user.id}`, {
+          method: "PUT",
+          headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(user)
+      }).then(resp => {
+          if (resp.ok) {
+              return;
+          } else if (resp.status === 401) {
+              throw new Error("Unauthorized");
+          } else {
+              throw new Error("An unknown error occurred while trying to edit a post. ");
+          }
+      })
+  })
+}
+
 export const getUserById = (id) => {
   return getToken().then((token) =>
   fetch(`${_apiUrl}/${id}`, {

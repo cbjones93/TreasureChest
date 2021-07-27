@@ -21,11 +21,11 @@ const MyAccount = (props) => {
         <Card>
             <CardBody>
                 <h5>Your Account Details</h5>
-             <img src={loggedInUser.imageLocation} />
+             <img src={myAccount.imageLocation} />
                 <p>
-                    <strong>{loggedInUser.firstName} {loggedInUser.lastName}</strong>
-                    <p>Email: {loggedInUser.email}</p>
-                    <p>Address: {loggedInUser.address} </p>
+                    <strong>{myAccount.firstName} {myAccount.lastName}</strong>
+                    <p>Email: {myAccount.email}</p>
+                    <p>Address: {myAccount.address} </p>
                  </p> 
             </CardBody>
         </Card>
