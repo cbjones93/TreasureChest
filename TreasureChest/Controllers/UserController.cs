@@ -47,7 +47,7 @@ namespace TreasureChest.Controllers
         }
 
         [HttpGet("getCurrentUser")]
-        public IActionResult GetUserId()
+        public IActionResult GetCurrentUserId()
         {
             var userProfile = GetCurrentUserProfile();
             if (userProfile == null)
@@ -55,6 +55,12 @@ namespace TreasureChest.Controllers
                 return NotFound();
             }
             return Ok(userProfile);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetUserById(int id)
+        {
+            return Ok(_userRepository.GetById(id));
         }
 
         // POST api/<UserController>
@@ -70,8 +76,15 @@ namespace TreasureChest.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, User user)
         {
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+            _userRepository.Update(user);
+            return NoContent();
+
         }
 
         // DELETE api/<UserController>/5

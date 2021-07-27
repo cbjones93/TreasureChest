@@ -8,6 +8,8 @@ import PostDetail from "./Posts/PostDetails";
 import PostEdit from "./Posts/PostEditForm";
 import { getCurrentUser } from "../modules/authManager";
 import FollowList from "./Follow/FollowList";
+import MyAccount from "./User/myAccountCard";
+import UserAccount from "./User/userAccountCard"
 
 export default function ApplicationViews({ isLoggedIn }) {
   const [activeUser, setActiveUser] = useState({});
@@ -41,20 +43,29 @@ export default function ApplicationViews({ isLoggedIn }) {
           <PostForm />
         </Route>
 
+        <Route path="/myaccount">
+          <MyAccount activeUser={activeUser} />
+          <FollowList activeUser={activeUser}/>
+        </Route>
+
         <Route path="/posts/details/:id" exact>
           <PostDetail activeUser={activeUser} />
         </Route>
+
         <Route path="/posts/edit/:id" exact>
           <PostEdit activeUser={activeUser} />
         </Route>
 
+        <Route path="/users/:id" exact>
+      <UserAccount activeUser={activeUser}/>
+        </Route>
 
         <Route path="/login">
           <Login />
         </Route>
 
         <Route path="/favoriteUsers">
-          <FollowList activeUser={activeUser}/>
+         
         </Route>
 
         <Route path="/register">

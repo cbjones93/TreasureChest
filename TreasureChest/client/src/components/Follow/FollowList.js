@@ -22,6 +22,7 @@ const FollowList = (props) => {
 
     return (
         <>
+                <h5> Your Favorite Sellers</h5>
             {follows.map((follow => {
                 return (
                     <Follow follow={follow}
