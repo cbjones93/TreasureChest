@@ -15,5 +15,7 @@ namespace TreasureChest.Repositories
         public void Delete(int id);
         public List<Post> GetPostsByUser(string firebaseUserId);
         public List<Post> GetPostsByCategoryId(int id);
+        public List<Post> Search(string criterion, bool sortDescending);
+        public void BuyItem(Post post);
     }
 }

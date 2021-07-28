@@ -14,9 +14,9 @@ const Post = ({ post }) => {
                     <strong>{post.name}</strong>
                 </p>
                 <img src={post.imageLocation} alt={post.name}/>
-                <p>${post.price}</p>
+                <p>${post.price}<Link to={`../../users/${post.user.id}`}><p> By: {post.user?.firstName} {post.user?.lastName}</p></Link> </p>
                 <button>
-                    <Link to={`/posts/details/${post.id}`}>view details</Link>
+                    <Link to={`/posts/details/${post.id}`}>View Details</Link>
                 </button>
                
             </CardBody >
