@@ -2,6 +2,7 @@
 using TreasureChest.Utils;
 using TreasureChest.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TreasureChest.Repositories
 {
@@ -23,10 +24,10 @@ namespace TreasureChest.Repositories
                         WHERE c.id = @id";
                     DbUtils.AddParameter(cmd, "@id", id);
 
-           
+
                     var reader = cmd.ExecuteReader();
                     var posts = new List<Post>();
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         posts.Add(new Post()
                         {
@@ -66,10 +67,10 @@ namespace TreasureChest.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                     SELECT p.Id as Id, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.SellerId, p.IsPurchased, u.id as userId, u.firstname, u.lastname, c.id as CatId, c.[name] as categoryName FROM Posts P 
+                     SELECT p.Id as Id, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.SellerId, p.IsPurchased, p.BuyerId, u.id as userId, u.firstname, u.lastname, c.id as CatId, c.[name] as categoryName FROM Posts P 
                         LEFT JOIN Users u on p.sellerid = u.id
                         LEFT JOIN Categories c on p.CategoryId = c.id 
-                        WHERE p.Id = @id"; 
+                        WHERE p.Id = @id";
                     DbUtils.AddParameter(cmd, "@id", id);
 
                     Post post = null;
@@ -86,6 +87,7 @@ namespace TreasureChest.Repositories
                             SellerId = DbUtils.GetInt(reader, "sellerId"),
                             PostDateTime = DbUtils.GetDateTime(reader, "postdatetime"),
                             IsPurchased = reader.GetBoolean(reader.GetOrdinal("ispurchased")),
+                            BuyerId = DbUtils.GetInt(reader, "buyerid"),
                             Category = new Category()
                             {
                                 Id = DbUtils.GetInt(reader, "catId"),
@@ -140,7 +142,7 @@ namespace TreasureChest.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT p.Id as Id, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.IsPurchased, u.id as userId, u.firstname, u.lastname, c.id as CatId, c.[name] as categoryName FROM Posts P 
+                    SELECT p.Id as Id, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.IsPurchased, p.buyerId, u.id as userId, u.firstname, u.lastname, c.id as CatId, c.[name] as categoryName FROM Posts P 
                         LEFT JOIN Users u on p.sellerid = u.id
                         LEFT JOIN Categories c on p.CategoryId = c.id";
                     var reader = cmd.ExecuteReader();
@@ -157,6 +159,7 @@ namespace TreasureChest.Repositories
                             Price = DbUtils.GetInt(reader, "price"),
                             PostDateTime = DbUtils.GetDateTime(reader, "postdatetime"),
                             IsPurchased = reader.GetBoolean(reader.GetOrdinal("ispurchased")),
+                            BuyerId = DbUtils.GetInt(reader, "buyerid"),
                             Category = new Category()
                             {
                                 Id = DbUtils.GetInt(reader, "catId"),
@@ -272,6 +275,91 @@ namespace TreasureChest.Repositories
             }
         }
 
+        public void BuyItem(Post post)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                UPDATE Posts
+                                SET isPurchased = 'True',
+                                    buyerId = @buyerid
+                                WHERE Id =@id";
+                    DbUtils.AddParameter(cmd, "@id", post.Id);
+                    DbUtils.AddParameter(cmd, "@buyerId", post.BuyerId);
+                    DbUtils.AddParameter(cmd, "@isPurchased", post.IsPurchased);
 
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+
+        }
+        public List<Post> Search(string criterion, bool sortDescending)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+
+                    var sql = @"
+                           SELECT p.Id as postId, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.SellerId, p.IsPurchased, u.id as userId, u.firstname, u.lastname, c.id as CatId, c.[name] as categoryName FROM Posts P 
+                        LEFT JOIN Users u on p.sellerid = u.id
+                        LEFT JOIN Categories c on p.CategoryId = c.id 
+                        WHERE p.[name] LIKE @Criterion or c.[name] LIKE @Criterion or p.[Description] LIKE @Criterion or u.FirstName like @Criterion or u.LastName like @Criterion";
+
+                    if (sortDescending)
+                    {
+                        sql += " ORDER BY p.PostDateTime DESC";
+                    }
+                    else
+                    {
+                        sql += " ORDER BY p.PostDateTime";
+                    }
+                    cmd.CommandText = sql;
+                    DbUtils.AddParameter(cmd, "@Criterion", $"%{criterion}%");
+
+                    var reader = cmd.ExecuteReader();
+                    var posts = new List<Post>();
+                    while (reader.Read())
+                    {
+                        var postId = DbUtils.GetInt(reader, "postId");
+                        var existingPost = posts.FirstOrDefault(posts => posts.Id == postId);
+                        if (existingPost == null)
+                        {
+                            existingPost = new Post()
+                            {
+                                Id = postId,
+                                Name = DbUtils.GetString(reader, "postName"),
+                                Description = DbUtils.GetString(reader, "description"),
+                                ImageLocation = DbUtils.GetString(reader, "imagelocation"),
+                                Price = DbUtils.GetInt(reader, "price"),
+                                PostDateTime = DbUtils.GetDateTime(reader, "postdatetime"),
+                                IsPurchased = reader.GetBoolean(reader.GetOrdinal("ispurchased")),
+                                Category = new Category()
+                                {
+                                    Id = DbUtils.GetInt(reader, "catId"),
+                                    Name = DbUtils.GetString(reader, "categoryName")
+                                },
+                                User = new User()
+                                {
+                                    Id = DbUtils.GetInt(reader, "userId"),
+                                    FirstName = DbUtils.GetString(reader, "firstname"),
+                                    LastName = DbUtils.GetString(reader, "lastname")
+                                },
+                            };
+                            posts.Add(existingPost);
+                        }
+                    }
+                    reader.Close();
+                    return posts;
+                }
+
+            }
+        }
     }
 }
+

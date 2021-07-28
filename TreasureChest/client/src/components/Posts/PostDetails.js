@@ -4,19 +4,25 @@ import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { getPostById } from "../../modules/postManager.js";
 import { Link } from "react-router-dom";
-import { deletePost } from "../../modules/postManager.js";
+import { deletePost, buyItem } from "../../modules/postManager.js";
 
 
 const PostDetail = (props) => {
     const { id } = useParams();
     const [post, setPost] = useState({});
     const history = useHistory();
-    console.log(props.activeUser.id)
+   
     
     const handleDeletePost = (id) => {
         window.confirm(`Are you sure you want to delete ${post.name}?`);
         deletePost(id)
         history.push("/posts")
+    }
+
+    const handleBuyPost = () => {
+        window.confirm(`Are you sure you want to buy ${post.name}?`);
+        buyItem(post)
+        
     }
     const getPostDetails = () => {
         getPostById(id)
@@ -25,8 +31,9 @@ const PostDetail = (props) => {
 
     useEffect(() => {
         getPostDetails();
-    }, []);
+    }, [post]);
 
+    
     return (
         <Card>
             <CardBody>
@@ -44,6 +51,11 @@ const PostDetail = (props) => {
                         <button onClick={() => history.push(`/posts/edit/${post.id}`)}> Edit</button>
                     </>
                 }
+                {post.sellerId !== props.activeUser.id && post.isPurchased !== true &&
+                 <button className="buttonBuyPost" type="button" onClick={() => handleBuyPost(post.id)}>Buy {post.name}</button>
+                }
+                {post.buyerId = props.activeUser.id &&
+                <div>You have purchased this item!</div>}
             </CardBody>
         </Card>
     )

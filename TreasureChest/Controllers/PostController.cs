@@ -55,6 +55,13 @@ namespace TreasureChest.Controllers
             return Ok(posts);
         }
 
+        [HttpGet("search")]
+        public IActionResult Search(string q, bool sortDesc)
+        {
+            return Ok(_postRepository.Search(q, sortDesc));
+        }
+
+
 
         // POST api/<PostController>
         [HttpPost]
@@ -76,6 +83,19 @@ namespace TreasureChest.Controllers
                 return BadRequest();
             }
             _postRepository.Update(post);
+            return NoContent();
+        }
+
+        [HttpPut("buyitem/{id}")]
+        public IActionResult BuyItem(int id, Post post)
+        {
+            if (id != post.Id)
+            {
+                return BadRequest();
+            }
+            var currentUserProfile = GetCurrentUserProfile();
+            post.BuyerId = currentUserProfile.Id;
+            _postRepository.BuyItem(post);
             return NoContent();
         }
 

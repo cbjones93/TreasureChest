@@ -104,3 +104,41 @@ export const getAllPostsFromCurrentUser = () => {
         });
     });
 };
+
+export const searchPosts = (search) => {
+    return getToken().then((token) => {
+      return fetch(`${baseUrl}/search?q=${search}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("An unknown error occurred while trying to get videos.");
+        }
+      });
+    });
+  };
+
+  export const buyItem = (post) => {
+    return getToken().then((token) => {
+        return fetch(`${baseUrl}/buyitem/${post.id}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(post)
+        }).then(resp => {
+            if (resp.ok) {
+                return;
+            } else if (resp.status === 401) {
+                throw new Error("Unauthorized");
+            } else {
+                throw new Error("An unknown error occurred while trying to edit a post. ");
+            }
+        })
+    })
+  }

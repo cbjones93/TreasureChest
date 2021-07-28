@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Card, CardBody } from "reactstrap";
 import { Link, useHistory } from "react-router-dom";
 import { getUserById } from "../../modules/authManager"
+import { getAllPosts } from "../../modules/postManager";
+import Post from "../Posts/Post";
 
 const MyAccount = (props) => {
     const [myAccount, setMyAccount] = useState({});
+    const [posts, setPosts] = useState([])
     const history = useHistory();
 
     let loggedInUser = props.activeUser
@@ -12,10 +15,21 @@ const MyAccount = (props) => {
 
     const getUser = () => {
         getUserById(loggedInUser.id)
-            .then(account => setMyAccount(account));
+            .then(account => setMyAccount(account))
     }
+
+    const getPosts = () => {
+        getAllPosts().then(posts => setPosts(posts));
+    };
+
     useEffect(() => {
-        getUser()
+        getPosts();
+    }, []);
+
+    useEffect(() => {
+        if (props.activeUser.id !== undefined) {
+            getUser()
+        }
     }, []);
     return (
         <Card>
@@ -27,6 +41,15 @@ const MyAccount = (props) => {
                     <p>Email: {myAccount.email}</p>
                     <p>Address: {myAccount.address} </p>
                  </p> 
+                 <h5>Your Purchased Items</h5>
+                 {posts.map((post) => {
+                     if(post.buyerId === myAccount.id) {
+                         return (
+                             <Post post = {post} key= {post.id} />
+                         )
+                     }
+                     })
+                 }
             </CardBody>
         </Card>
     )
