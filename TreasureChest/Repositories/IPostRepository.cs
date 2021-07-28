@@ -14,5 +14,6 @@ namespace TreasureChest.Repositories
         public void Update(Post post);
         public void Delete(int id);
         public List<Post> GetPostsByUser(string firebaseUserId);
+        public List<Post> GetPostsByCategoryId(int id);
     }
 }
