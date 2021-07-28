@@ -5,10 +5,14 @@ import { useHistory } from "react-router";
 
 
 
-const PostList = () => {
+const PostList = (props) => {
+    const [myAccount, setMyAccount] = useState({});
     const [posts, setPosts] = useState([]);
     const history = useHistory();
     const [search, setSearch] = useState([])
+
+    let loggedInUser = props.activeUser
+    console.log(loggedInUser) 
 
     const getPosts = () => {
         getAllPosts().then(posts => setPosts(posts));
@@ -51,7 +55,12 @@ const PostList = () => {
                 {posts.map((post) => {
 
                     return (
-                        <Post post={post} key={post.id} />)
+                        <>
+                        {post.isPurchased === false &&
+                        <Post post={post} key={post.id} loggedInUser={loggedInUser} />}
+                        </>
+                        )
+                        
                 })}
 
             </div>

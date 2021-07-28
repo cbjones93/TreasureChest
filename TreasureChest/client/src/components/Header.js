@@ -38,9 +38,6 @@ export default function Header({ isLoggedIn }) {
               <NavItem>
               <NavLink tag={RRNavLink} to="/posts">Posts</NavLink>
               </NavItem>
-              <NavItem>
-              <NavLink tag={RRNavLink} to="/favoriteUsers">Your Favorite Sellers</NavLink>
-              </NavItem>
               <UncontrolledDropdown>
               <DropdownToggle>Categories</DropdownToggle>
               <DropdownMenu>
