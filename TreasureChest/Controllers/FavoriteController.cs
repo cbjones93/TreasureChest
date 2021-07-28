@@ -15,40 +15,46 @@ namespace TreasureChest.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class FavoriteController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository categoryRepository)
+        private readonly IFavoriteRepository _favoriteRepository;
+        public FavoriteController(IFavoriteRepository favoriteRepository)
         {
-            _categoryRepository = categoryRepository;
+            _favoriteRepository = favoriteRepository;
         }
-        // GET: api/<CategoryController>
+        // GET: api/<FavoriteController>
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_categoryRepository.GetAllCategories());
+            return Ok(_favoriteRepository.GetAllFavorites());
         }
 
-        // GET api/<CategoryController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/<FavoriteController>/5
+        [HttpGet("favoritesbyuser/{id}")]
+        public IActionResult GetFavoritesByUser(int id)
         {
-            return "value";
+            var favorites = _favoriteRepository.GetAllFavoritesByUserId(id);
+            if (favorites == null)
+            {
+                return NotFound();
+
+            }
+            return Ok(favorites);
         }
 
-        // POST api/<CategoryController>
+        // POST api/<FavoriteController>
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/<CategoryController>/5
+        // PUT api/<FavoriteController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<CategoryController>/5
+        // DELETE api/<FavoriteController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

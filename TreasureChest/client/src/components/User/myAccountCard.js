@@ -4,9 +4,12 @@ import { Link, useHistory } from "react-router-dom";
 import { getUserById } from "../../modules/authManager"
 import { getAllPosts } from "../../modules/postManager";
 import Post from "../Posts/Post";
+import { getFavoritesByUserId } from "../../modules/favoriteManager";
+import Favorite from "../Favorite/Favorite";
 
 const MyAccount = (props) => {
     const [myAccount, setMyAccount] = useState({});
+    const [favorites, setFavorites] = useState([]);
     const [posts, setPosts] = useState([])
     const history = useHistory();
 
@@ -17,7 +20,10 @@ const MyAccount = (props) => {
         getUserById(loggedInUser.id)
             .then(account => setMyAccount(account))
     }
-
+    const getFavorites = () => {
+        getFavoritesByUserId(loggedInUser.id)
+        .then(favorite => setFavorites(favorite))
+    }
     const getPosts = () => {
         getAllPosts().then(posts => setPosts(posts));
     };
@@ -25,31 +31,67 @@ const MyAccount = (props) => {
     useEffect(() => {
         getPosts();
     }, []);
+    
+  
 
     useEffect(() => {
         if (props.activeUser.id !== undefined) {
-            getUser()
+            getUser() 
         }
-    }, []);
+    }, [loggedInUser]);
+
+    useEffect(() => {
+        if (props.activeUser.id !== undefined) {
+            getFavorites()
+        }
+    }, [loggedInUser]);
+
+
     return (
         <Card>
             <CardBody>
                 <h5>Your Account Details</h5>
-             <img src={myAccount.imageLocation} />
-                <p>
-                    <strong>{myAccount.firstName} {myAccount.lastName}</strong>
-                    <p>Email: {myAccount.email}</p>
-                    <p>Address: {myAccount.address} </p>
-                 </p> 
-                 <h5>Your Purchased Items</h5>
-                 {posts.map((post) => {
-                     if(post.buyerId === myAccount.id) {
-                         return (
-                             <Post post = {post} key= {post.id} />
-                         )
-                     }
-                     })
-                 }
+                <img src={loggedInUser.imageLocation} />
+                <div>
+                    <strong>{loggedInUser.firstName} {loggedInUser.lastName}</strong>
+                    <p>Email: {loggedInUser.email}</p>
+                    <p>Address: {loggedInUser.address} </p>
+                    <button>
+                        <Link to={`/myaccount/edit`}>Edit Account</Link>
+                    </button>
+                </div>
+                <h5>Items For Sale</h5>
+                {posts.map((post) => {
+                    return (
+                        <>
+                            {post.user.id === loggedInUser.id && post.isPurchased !== true &&
+                                <Post post={post} key={post.id} />
+                            }
+                        </>
+                    )
+
+                })
+                }
+                <h5>Your Purchased Items</h5>
+                {posts.map((post) => {
+                    return (
+                        <>
+                            {post.buyerId === loggedInUser.id &&
+                                <Post post={post} key={post.id} loggedInUser={loggedInUser} />
+                            }
+                        </>
+                    )
+
+                })
+                }
+                <h5>Your Saved Items</h5>
+                {favorites.map((favorite) => {
+                    return (
+                        <>
+                        <Favorite favorite = {favorite} key = {favorite.id} />
+                        </>
+                    )
+                })}
             </CardBody>
         </Card>
     )

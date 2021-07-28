@@ -5,15 +5,15 @@ import { Link, useHistory } from "react-router-dom";
 const Follow = ({ follow, loggedInUser }) => {
     console.log(follow.currentUserId)
     const history = useHistory()
-    if (loggedInUser.id === follow.currentUserId) {
+    if (loggedInUser?.id === follow.currentUserId) {
     return (
         <Card >
             < CardBody >
                     <img src={follow.user.imageLocation} />
-                <p>
+                <div>
                     <strong>{follow.user.firstName} {follow.user.lastName}</strong>
                     <p>Email: {follow.user.email}</p>
-                </p>
+                </div>
 
             </CardBody >
         </Card >

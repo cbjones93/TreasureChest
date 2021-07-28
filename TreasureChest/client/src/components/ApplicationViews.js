@@ -38,7 +38,7 @@ export default function ApplicationViews({ isLoggedIn }) {
         </Route>
 
         <Route path="/posts" exact>
-          <PostList />
+          <PostList activeUser={activeUser} />
         </Route>
 
         <Route path="/createpost">

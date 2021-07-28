@@ -41,7 +41,8 @@ const PostDetail = (props) => {
                     <strong>{post.name}</strong>
                 </p>
                 <img src={post.imageLocation} alt={post.name} />
-                <Link to={`../../users/${post.sellerId}`}><h5>By: {post.user?.firstName} {post.user?.lastName}</h5></Link>
+                {post.user?.id !== props.activeUser.id &&
+                <Link to={`../../users/${post.sellerId}`}><h5>By: {post.user?.firstName} {post.user?.lastName}</h5></Link>}
                 <p>{post.description}</p>
                 <p>${post.price}</p>
                 <p>Category: {post.category?.name}</p>
@@ -54,7 +55,7 @@ const PostDetail = (props) => {
                 {post.sellerId !== props.activeUser.id && post.isPurchased !== true &&
                  <button className="buttonBuyPost" type="button" onClick={() => handleBuyPost(post.id)}>Buy {post.name}</button>
                 }
-                {post.buyerId = props.activeUser.id &&
+                {post.buyerId === props.activeUser.id &&
                 <div>You have purchased this item!</div>}
             </CardBody>
         </Card>

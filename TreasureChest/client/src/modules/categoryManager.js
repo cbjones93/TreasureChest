@@ -12,7 +12,7 @@ export const getAllCategories = () => {
             if (resp.ok) {
                 return resp.json();
             } else {
-                throw new Error("An unknown error occurred while trying to get follows.");
+                throw new Error("An unknown error occurred while trying to get categories.");
             }
         });
     });
