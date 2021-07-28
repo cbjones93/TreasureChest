@@ -5,9 +5,14 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink
+  NavLink, 
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap';
 import { logout } from '../modules/authManager';
+import CategoryList from './Category/CategoryList';
 
 export default function Header({ isLoggedIn }) {
 
@@ -36,6 +41,12 @@ export default function Header({ isLoggedIn }) {
               <NavItem>
               <NavLink tag={RRNavLink} to="/favoriteUsers">Your Favorite Sellers</NavLink>
               </NavItem>
+              <UncontrolledDropdown>
+              <DropdownToggle>Categories</DropdownToggle>
+              <DropdownMenu>
+                <CategoryList />
+              </DropdownMenu>
+              </UncontrolledDropdown>
               <NavItem>
                 <a aria-current="page" className="nav-link"
                   style={{ cursor: "pointer" }} onClick={logout}>Logout</a>
