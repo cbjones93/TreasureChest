@@ -36,6 +36,13 @@ namespace TreasureChest.Controllers
             var post = _postRepository.GetPostById(id);
             return Ok(post);
         }
+        [HttpGet("GetCategory/{id}")]
+        public IActionResult GetCategoryById(int id)
+        {
+            var post = _postRepository.GetPostsByCategoryId(id);
+            return Ok(post);
+        }
+
         [HttpGet("myPosts/")]
         public IActionResult GetPostsByUser()
         {

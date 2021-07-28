@@ -11,6 +11,7 @@ import FollowList from "./Follow/FollowList";
 import MyAccount from "./User/myAccountCard";
 import UserAccount from "./User/userAccountCard"
 import { UserEdit } from "./User/myAccountEditForm";
+import CategoryPostList from "./Category/CategoryPostList";
 
 export default function ApplicationViews({ isLoggedIn }) {
   const [activeUser, setActiveUser] = useState({});
@@ -59,6 +60,10 @@ export default function ApplicationViews({ isLoggedIn }) {
         <Route path="/posts/edit/:id" exact>
           <PostEdit activeUser={activeUser} />
         </Route>
+        <Route path="/categoryPost/:id" exact>
+          <CategoryPostList activeUser={activeUser} />
+        </Route>
+
 
         <Route path="/users/:id" exact>
       <UserAccount activeUser={activeUser}/>
