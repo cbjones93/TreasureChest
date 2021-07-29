@@ -21,7 +21,8 @@ namespace TreasureChest.Repositories
                         SELECT p.Id as postId, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.SellerId, p.IsPurchased, u.id as userId, u.firstname, u.lastname, c.id as CatId, c.[name] as categoryName FROM Posts P 
                         LEFT JOIN Users u on p.sellerid = u.id
                         LEFT JOIN Categories c on p.CategoryId = c.id 
-                        WHERE c.id = @id";
+                        WHERE c.id = @id
+                        ORDER BY p.postdatetime DESC";
                     DbUtils.AddParameter(cmd, "@id", id);
 
 
@@ -144,7 +145,9 @@ namespace TreasureChest.Repositories
                     cmd.CommandText = @"
                     SELECT p.Id as Id, p.[name] as postName, p.description, p.ImageLocation, p.Price, p.PostDateTime, p.IsPurchased, p.buyerId, u.id as userId, u.firstname, u.lastname, c.id as CatId, c.[name] as categoryName FROM Posts P 
                         LEFT JOIN Users u on p.sellerid = u.id
-                        LEFT JOIN Categories c on p.CategoryId = c.id";
+                        LEFT JOIN Categories c on p.CategoryId = c.id
+                        ORDER BY p.postdatetime DESC";
+                    
                     var reader = cmd.ExecuteReader();
 
                     var posts = new List<Post>();

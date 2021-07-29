@@ -6,21 +6,23 @@ const Follow = ({ follow, loggedInUser }) => {
     console.log(follow.currentUserId)
     const history = useHistory()
     if (loggedInUser?.id === follow.currentUserId) {
-    return (
-        <Card >
-            < CardBody >
+        return (
+            <Card >
+                < CardBody >
                     <img src={follow.user.imageLocation} />
-                <div>
-                    <strong>{follow.user.firstName} {follow.user.lastName}</strong>
-                    <p>Email: {follow.user.email}</p>
-                </div>
+                    <div>
+                        <Link to={`../../users/${follow.user.id}`}>
+                            <strong>{follow.user.firstName} {follow.user.lastName}</strong>
+                        </Link>
+                        <p>Email: {follow.user.email}</p>
+                    </div>
 
-            </CardBody >
-        </Card >
-    )
+                </CardBody >
+            </Card >
+        )
     }
     else {
-      return null;
+        return null;
     }
 }
 export default Follow;

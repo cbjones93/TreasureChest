@@ -7,5 +7,7 @@ namespace TreasureChest.Repositories
     {
         List<Favorite> GetAllFavorites();
         public List<Favorite> GetAllFavoritesByUserId(int userId);
+        public void AddFavorite(Favorite favorite);
+        public void Delete(int id);
     }
 }

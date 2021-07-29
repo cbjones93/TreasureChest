@@ -15,72 +15,76 @@ import CategoryPostList from "./Category/CategoryPostList";
 
 export default function ApplicationViews({ isLoggedIn }) {
   const [activeUser, setActiveUser] = useState({});
+ 
 
-
-  useEffect(() => {
+  const UserLoggedIn = () => {
     if (isLoggedIn) {
       getCurrentUser()
         .then((user) => {
           setActiveUser(user)
           console.log(user)
-        })
+         
+        }
+        )}
     }
-  }, [])
 
-  return (
-    <main>
-      <Switch>
-        {/* <Route path="/" exact>
+    useEffect(() => {
+      UserLoggedIn();
+    }, [setActiveUser]);
+
+    return (
+      <main>
+        <Switch>
+          {/* <Route path="/" exact>
           {isLoggedIn ? <PostList /> : <Redirect to="/login" />}
         </Route> */}
-        <Route path="/" exact>
-          <div> Hello! </div>
-        </Route>
-
-        <Route path="/posts" exact>
-          <PostList activeUser={activeUser} />
-        </Route>
-
-        <Route path="/createpost">
-          <PostForm />
-        </Route>
-
-        <Route path="/myaccount" exact>
-          <MyAccount activeUser={activeUser} />
-          <FollowList activeUser={activeUser}/>
-        </Route>
-        <Route path= "/myaccount/edit">
-          <UserEdit activeUser={activeUser}/>
+          <Route path="/" exact>
+            <div> Hello! </div>
           </Route>
 
-        <Route path="/posts/details/:id" exact>
-          <PostDetail activeUser={activeUser} />
-        </Route>
+          <Route path="/posts" exact>
+            {isLoggedIn ? <PostList activeUser={activeUser} /> : <Redirect to="/login" />}
+          </Route>
 
-        <Route path="/posts/edit/:id" exact>
-          <PostEdit activeUser={activeUser} />
-        </Route>
-        <Route path="/categoryPost/:id" exact>
-          <CategoryPostList activeUser={activeUser} />
-        </Route>
+          <Route path="/createpost">
+            {isLoggedIn ? <PostForm /> : <Redirect to="/login" />}
+          </Route>
+
+          <Route path="/myaccount" exact>
+            {isLoggedIn ? <MyAccount activeUser={activeUser} /> : <Redirect to="/login" />}
+            {isLoggedIn ? <FollowList activeUser={activeUser} /> : <Redirect to="/login" />}
+          </Route>
+
+          <Route path="/myaccount/edit">
+            {isLoggedIn ? <UserEdit activeUser={activeUser} /> : <Redirect to="/login" />}
+          </Route>
+
+          <Route path="/posts/details/:id" exact>
+            {isLoggedIn ? <PostDetail activeUser={activeUser} /> : <Redirect to="/login" />}
+          </Route>
+
+          <Route path="/posts/edit/:id" exact>
+            {isLoggedIn ? <PostEdit activeUser={activeUser} /> : <Redirect to="/login" />}
+          </Route>
+
+          <Route path="/categoryPost/:id" exact>
+            {isLoggedIn ? <CategoryPostList activeUser={activeUser} /> : <Redirect to="/login" />}
+          </Route>
 
 
-        <Route path="/users/:id" exact>
-      <UserAccount activeUser={activeUser}/>
-        </Route>
+          <Route path="/users/:id" exact>
+            {isLoggedIn ? <UserAccount activeUser={activeUser} /> : <Redirect to="/login" />}
+          </Route>
 
-        <Route path="/login">
-          <Login />
-        </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
 
-        <Route path="/favoriteUsers">
-         
-        </Route>
 
-        <Route path="/register">
-          <Register />
-        </Route>
-      </Switch>
-    </main >
-  );
-};
+          <Route path="/register">
+            <Register />
+          </Route>
+        </Switch>
+      </main >
+    );
+  };

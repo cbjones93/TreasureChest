@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { createPost } from "../../modules/postManager";
+import { getAllCategories } from "../../modules/categoryManager";
 
 const PostForm = () => {
     const [post, setPost] = useState({
@@ -11,6 +12,15 @@ const PostForm = () => {
         categoryId: 0
     })
     const history = useHistory();
+    const [category, setCategories] = useState([]);
+
+    const getCategories = () => {
+        getAllCategories()
+        .then(category => setCategories(category));
+    }
+    useEffect(() => {
+        getCategories()
+    }, []);
 
 
     const handleInputChange = (event) => {
@@ -100,7 +110,7 @@ const PostForm = () => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="category">Category: </label>
-                    <input
+                    <select
                     type="number"
                         value={post.categoryId}
                         name="categoryId"
@@ -108,7 +118,11 @@ const PostForm = () => {
                         onChange={handleInputChange}
                         className="form-control"
                     >
-                    </input>
+                         <option value ="0"> Select a Category</option>
+                {category.map(cat => (
+                    <option key ={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+                    </select>
                 </div>
             </fieldset>
             <button className="btn btn-primary" onClick={handleClickSavePost}>Submit Post</button>

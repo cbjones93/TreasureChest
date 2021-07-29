@@ -1,7 +1,9 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import { useHistory } from "react-router";
 
 const _apiUrl = "/api/user";
+
 
 export const editUser = (user) => {
   return getToken().then((token) => {
@@ -97,6 +99,7 @@ export const login = (email, pw) => {
 
 export const logout = () => {
   firebase.auth().signOut()
+  
 };
 
 
