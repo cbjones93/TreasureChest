@@ -30,7 +30,7 @@ export default function ApplicationViews({ isLoggedIn }) {
 
     useEffect(() => {
       UserLoggedIn();
-    }, [setActiveUser]);
+    }, [setActiveUser, isLoggedIn]);
 
     return (
       <main>
