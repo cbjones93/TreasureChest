@@ -18,7 +18,6 @@ const UserAccount = (props) => {
     const history = useHistory();
 
     const handleDeleteFollow = (id) => {
-        debugger
         if (window.confirm(`Are you sure you want to remove ${userAccount.firstName} ${userAccount.lastName} From your favorite sellers?`)) {
             deleteFollow(id)
             .then(getFollows())
@@ -36,7 +35,8 @@ const UserAccount = (props) => {
     }
     let loggedInUser = props.activeUser
     console.log(loggedInUser)
-    let targetedUser = userAccount
+    console.log(follows)
+
 
     const getPosts = () => {
         getAllPosts().then(posts => setPosts(posts));
@@ -68,7 +68,7 @@ const UserAccount = (props) => {
         if (props.activeUser.id !== undefined) {
             getFollows()
         }
-    }, [props.activeUser.id]);
+    }, [userAccount]);
 
     useEffect(() => {
         getPosts();
@@ -78,7 +78,7 @@ const UserAccount = (props) => {
     }, []);
 
 
-console.log(follows)
+
 
 
 
@@ -86,7 +86,7 @@ console.log(follows)
         <>
             <Card>
                 <CardBody>
-                    <h5> {targetedUser.firstName} {targetedUser.lastName}'s Account Page</h5>
+                    <h5> {userAccount.firstName} {userAccount.lastName}'s Account Page</h5>
                     <img src={userAccount.imageLocation} />
                     <div>
                         <strong></strong>

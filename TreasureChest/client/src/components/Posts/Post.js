@@ -3,7 +3,7 @@ import { Card, CardBody } from "reactstrap";
 import { Link, useHistory } from "react-router-dom";
 
 const Post = ({ post, loggedInUser, userAccount }) => {
-    console.log(loggedInUser)
+  
     const history = useHistory()
     return (
         <Card >
