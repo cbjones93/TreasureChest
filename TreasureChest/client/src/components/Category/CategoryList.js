@@ -3,9 +3,12 @@ import { useHistory } from "react-router";
 import Category from "./Category";
 import { getAllCategories } from "../../modules/categoryManager";
 
-const CategoryList = () => {
+const CategoryList = (props) => {
     const [categories, setCategories] = useState([]);
     const history = useHistory();
+
+    let loggedInUser = props.activeUser
+    console.log(loggedInUser) 
 
     const getCategories = () => {
         getAllCategories()
@@ -21,7 +24,8 @@ const CategoryList = () => {
         {categories.map((category => {
             return (
                 <Category category = {category}
-                key = {category.id} />
+                key = {category.id}
+                loggedInUser={loggedInUser} />
             )
         }))}
         </>

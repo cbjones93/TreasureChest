@@ -13,14 +13,26 @@ const UserAccount = (props) => {
     const [follows, setFollows] = useState([]);
     const [posts, setPosts] = useState([])
     const [favorites, setFavorites] = useState([]);
-    const [isFollowed, setIsFollowed] = useState()
+    const [isFollowed, setIsFollowed] = useState(false)
     const [userAccount, setUserAccount] = useState({});
     const history = useHistory();
 
     const handleDeleteFollow = (id) => {
-        window.confirm(`Are you sure you want to remove ${userAccount.firstName} ${userAccount.lastName} From your favorite sellers?`);
-        deleteFollow(id)
-
+        debugger
+        if (window.confirm(`Are you sure you want to remove ${userAccount.firstName} ${userAccount.lastName} From your favorite sellers?`)) {
+            deleteFollow(id)
+            .then(getFollows())
+        }
+        else {
+        }
+    }
+    const handleAddFollow = () => {  
+        const newUserObject = {
+            "userId": id,
+        }
+        addFollow(newUserObject)
+        .then(getFollows())
+        
     }
     let loggedInUser = props.activeUser
     console.log(loggedInUser)
@@ -31,7 +43,7 @@ const UserAccount = (props) => {
     };
     const getFavorites = () => {
         getFavoritesByUserId(props.activeUser.id)
-        .then(favorite => setFavorites(favorite))
+            .then(favorite => setFavorites(favorite))
     }
     const getUser = () => {
         getUserById(id)
@@ -39,17 +51,13 @@ const UserAccount = (props) => {
     }
     const getFollows = () => {
         getAllFollowsByUserId(props.activeUser.id)
-            .then(follow => setFollows(follow));
+            .then(follow => {
+                let filteredFollows = follow.find((follow => follow.user.id !== id && follow.user.id !== loggedInUser.id))
+                setFollows(filteredFollows);
+            })
 
     };
 
-    const handleAddFollow = () => {
-        setIsFollowed(true)
-        const newUserObject = {
-            "userId": id,
-        }
-        addFollow(newUserObject)
-    }
     useEffect(() => {
         if (props.activeUser.id !== undefined) {
             getFavorites()
@@ -60,7 +68,7 @@ const UserAccount = (props) => {
         if (props.activeUser.id !== undefined) {
             getFollows()
         }
-    }, [loggedInUser]);
+    }, [props.activeUser.id]);
 
     useEffect(() => {
         getPosts();
@@ -70,7 +78,7 @@ const UserAccount = (props) => {
     }, []);
 
 
-
+console.log(follows)
 
 
 
@@ -85,37 +93,40 @@ const UserAccount = (props) => {
                         <p>Email: {userAccount.email}</p>
                         <p>Address: {userAccount.address} </p>
                     </div>
-                    {follows?.find(follow => follow.user.id != id && follow.user.id != loggedInUser.id) ?
+                    {follows === undefined ?
                         <button onClick={handleAddFollow}> Follow this user!</button>
                         :
-                        <>
-                            <p>You're following this user!</p>
-                            <h5>{userAccount.firstName}'s Items For Sale</h5>
-                            {posts.map((post) => {
-                                return (
-                                    <>
-                                        {post.user.id === userAccount.id && post.isPurchased !== true &&
-                                            <Post post={post} key={post.id} />
-                                        }
-                                    </>
-                                )
+                     <></>
+                    }
+                    {follows !== undefined ?
+                    <button onClick={() => handleDeleteFollow(follows.id)}>  Unfollow User </button> :
+                    <> </> }
+                    <h5>{userAccount.firstName}'s Items For Sale</h5>
+                    {posts.map((post) => {
+                        return (
+                            <>
+                                {post.user.id === userAccount.id && post.isPurchased !== true &&
+                                    <Post post={post} key={post.id} userAccount = {userAccount} />
+                                }
+                            </>
+                        )
 
-                            })
-                            }
-                             <h5>{userAccount.firstName}'s Saved Items</h5>
-                {favorites.map((favorite) => {
-                    return (
-                        <>
-                        <Favorite favorite = {favorite} key = {favorite.id} />
-                        </>
-                    )
-                })}
-                            {/* <button onClick={handleDeleteFollow}>  Unfollow User </button> */}
-                        </>}
+                    })
+                    }
+                    <h5>{userAccount.firstName}'s Saved Items</h5>
+                    {favorites.map((favorite) => {
+                        return (
+                            <>
+                                <Favorite favorite={favorite} key={favorite.id} />
+                            </>
+                        )
+                    })}
+                
+                        
 
 
                 </CardBody>
-            </Card>
+        </Card>
         </>
     )
 }

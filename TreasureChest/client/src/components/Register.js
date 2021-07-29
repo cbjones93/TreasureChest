@@ -12,6 +12,7 @@ export default function Register() {
   const [address, setAddress] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
+  
 
   const registerClick = (e) => {
     e.preventDefault();
@@ -20,6 +21,7 @@ export default function Register() {
     } else {
       const userProfile = { firstName, lastName, address, email };
       register(userProfile, password)
+
         .then(() => history.push("/"));
     }
   };

@@ -13,6 +13,7 @@ const Favorite = ({ favorite }) => {
                 <Link to={`/posts/details/${favorite.post.id}`}>
              <img src={favorite.post.imageLocation} alt={favorite.post.name} />
              </Link>
+             <p>${favorite.post?.price}</p>
             </CardBody >
         </Card >
     )

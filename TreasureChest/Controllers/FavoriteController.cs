@@ -18,9 +18,11 @@ namespace TreasureChest.Controllers
     public class FavoriteController : ControllerBase
     {
         private readonly IFavoriteRepository _favoriteRepository;
-        public FavoriteController(IFavoriteRepository favoriteRepository)
+        private readonly IUserRepository _userRepository;
+        public FavoriteController(IFavoriteRepository favoriteRepository, IUserRepository userRepository)
         {
             _favoriteRepository = favoriteRepository;
+            _userRepository = userRepository;
         }
         // GET: api/<FavoriteController>
         [HttpGet]
@@ -44,8 +46,12 @@ namespace TreasureChest.Controllers
 
         // POST api/<FavoriteController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(Favorite favorite)
         {
+            var currentUserProfile = GetCurrentUserProfile();
+            favorite.UserId = currentUserProfile.Id;
+            _favoriteRepository.AddFavorite(favorite);
+            return CreatedAtAction(nameof(GetAll), new { id = favorite.Id }, favorite);
         }
 
         // PUT api/<FavoriteController>/5
@@ -58,6 +64,13 @@ namespace TreasureChest.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _favoriteRepository.Delete(id);
+        }
+
+        private User GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userRepository.GetByFirebaseId(firebaseUserId);
         }
     }
 }

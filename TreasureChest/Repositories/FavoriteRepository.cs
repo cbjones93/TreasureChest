@@ -43,7 +43,7 @@ namespace TreasureChest.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT f.id, f.ItemId, f.UserId,  u.firstName, u.LastName, p.id as postId, p.[name], p.IsPurchased, p.imageLocation, p.postdatetime FROM FAVORITES f
+                        SELECT f.id, f.ItemId, f.UserId,  u.firstName, u.LastName, p.id as postId, p.[name], p.IsPurchased, p.imageLocation, p.postdatetime, p.price FROM FAVORITES f
                             LEFT JOIN Users u on f.UserId = u.id
                             LEFT JOIN Posts p on f.ItemId = p.id
                             WHERE f.UserId = @userId AND p.IsPurchased = 0
@@ -70,13 +70,44 @@ namespace TreasureChest.Repositories
                                 Name = DbUtils.GetString(reader, "name"),
                                 IsPurchased = reader.GetBoolean(reader.GetOrdinal("isPurchased")),
                                 PostDateTime= DbUtils.GetDateTime(reader, "postdatetime"),
-                                ImageLocation=DbUtils.GetString(reader, "imageLocation")
+                                ImageLocation=DbUtils.GetString(reader, "imageLocation"),
+                                Price = DbUtils.GetInt(reader, "price")
                             }
                         });
                     }
                     reader.Close();
                     return favorites;
 
+                }
+            }
+        }
+    public void AddFavorite(Favorite favorite)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            INSERT INTO FAVORITES(ItemId, UserId)
+                                    OUTPUT INSERTED.ID
+                                    VALUES(@ItemId, @UserId)";
+                    DbUtils.AddParameter(cmd, "@ItemId", favorite.ItemId);
+                    DbUtils.AddParameter(cmd, "@UserId", favorite.UserId);
+                    favorite.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+        public void Delete(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM Favorites WHERE ID =@id";
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

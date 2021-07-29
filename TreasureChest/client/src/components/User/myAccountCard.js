@@ -14,7 +14,7 @@ const MyAccount = (props) => {
     const history = useHistory();
 
     let loggedInUser = props.activeUser
-    console.log(loggedInUser)
+    console.log(props.activeUser)
 
     const getUser = () => {
         getUserById(loggedInUser.id)
@@ -38,7 +38,7 @@ const MyAccount = (props) => {
         if (props.activeUser.id !== undefined) {
             getUser() 
         }
-    }, [loggedInUser]);
+    }, [props.activeUser]);
 
     useEffect(() => {
         if (props.activeUser.id !== undefined) {
@@ -51,11 +51,11 @@ const MyAccount = (props) => {
         <Card>
             <CardBody>
                 <h5>Your Account Details</h5>
-                <img src={loggedInUser.imageLocation} />
+                <img src={props.activeUser.imageLocation} />
                 <div>
-                    <strong>{loggedInUser.firstName} {loggedInUser.lastName}</strong>
-                    <p>Email: {loggedInUser.email}</p>
-                    <p>Address: {loggedInUser.address} </p>
+                    <strong>{props.activeUser.firstName} {props.activeUser.lastName}</strong>
+                    <p>Email: {props.activeUser.email}</p>
+                    <p>Address: {props.activeUser.address} </p>
                     <button>
                         <Link to={`/myaccount/edit`}>Edit Account</Link>
                     </button>
