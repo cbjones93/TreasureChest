@@ -21,6 +21,7 @@ export const UserEdit = (props) => {
     useEffect(() => {
      getUser()
     }, [props])
+
     const handleClickSaveUser = (event) => {
         event.preventDefault()
         if (user.firstName === "" || user.lastName === "" || user.email ==="" || user.address === "" || user.imageLocation ===""){

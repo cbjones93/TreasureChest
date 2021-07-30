@@ -12,7 +12,7 @@ import {
   DropdownItem
 } from 'reactstrap';
 import { logout } from '../modules/authManager';
-import CategoryList from './Category/CategoryList';
+
 
 export default function Header({ isLoggedIn }) {
 
@@ -38,12 +38,6 @@ export default function Header({ isLoggedIn }) {
               <NavItem>
               <NavLink tag={RRNavLink} to="/posts">Posts</NavLink>
               </NavItem>
-              <UncontrolledDropdown>
-              <DropdownToggle>Categories</DropdownToggle>
-              <DropdownMenu>
-                <CategoryList />
-              </DropdownMenu>
-              </UncontrolledDropdown>
               <NavItem>
                 <a aria-current="page" className="nav-link"
                   style={{ cursor: "pointer" }} onClick={logout}>Logout</a>

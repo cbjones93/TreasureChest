@@ -12,8 +12,11 @@ const PostDetail = (props) => {
     const { id } = useParams();
     const [post, setPost] = useState({});
     const [favorites, setFavorites] = useState([]);
-
     const history = useHistory();
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    } 
 
     let loggedInUser = props.activeUser
     console.log(loggedInUser)

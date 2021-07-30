@@ -9,9 +9,9 @@ const Post = ({ post, loggedInUser, userAccount }) => {
         <Card >
             < CardBody >
 
-                <p>
+                <div>
                     <strong>{post.name}</strong>
-                </p>
+                </div>
                
                 <p>${post.price}
                 {post.user?.id !== loggedInUser?.id && userAccount === undefined &&<Link to={`../../users/${post.user.id}`}><p> By: {post.user?.firstName} {post.user?.lastName}</p></Link> }</p>

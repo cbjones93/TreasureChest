@@ -38,7 +38,7 @@ const MyAccount = (props) => {
         if (props.activeUser.id !== undefined) {
             getUser() 
         }
-    }, [props.activeUser]);
+    }, [props.activeUser.id]);
 
     useEffect(() => {
         if (props.activeUser.id !== undefined) {
@@ -51,11 +51,11 @@ const MyAccount = (props) => {
         <Card>
             <CardBody>
                 <h5>Your Account Details</h5>
-                <img src={props.activeUser.imageLocation} />
+                <img src={myAccount.imageLocation} />
                 <div>
-                    <strong>{props.activeUser.firstName} {props.activeUser.lastName}</strong>
-                    <p>Email: {props.activeUser.email}</p>
-                    <p>Address: {props.activeUser.address} </p>
+                    <strong>{myAccount.firstName} {myAccount.lastName}</strong>
+                    <p>Email: {myAccount.email}</p>
+                    <p>Address: {myAccount.address} </p>
                     <button>
                         <Link to={`/myaccount/edit`}>Edit Account</Link>
                     </button>

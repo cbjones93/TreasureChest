@@ -15,7 +15,7 @@ const CategoryPost = ({ post, loggedInUser }) => {
                     </p>
                     <img src={post.imageLocation} alt={post.name} />
                     <p>${post.price}</p>
-                    <div>{post.user?.id !== loggedInUser.id ?
+                    <div>{post.user?.id !== loggedInUser?.id ?
                         <button>
                             <Link to={`/posts/details/${post.id}`}>view details</Link>
                         </button> :

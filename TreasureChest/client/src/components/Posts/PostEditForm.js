@@ -2,22 +2,31 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { Form, FormGroup, Button, Container } from "reactstrap";
 import { editPost, getPostById } from "../../modules/postManager";
+import { getAllCategories } from "../../modules/categoryManager";
 
 export const PostEdit = () => {
     const [post, setPost] = useState({})
     const { id } = useParams();
     const history = useHistory();
-
-    const handleInputChange = (event) => {
-        const newPost = {...post}
-        let selectedVal = event.target.value
-        newPost[event.target.id] = selectedVal
-        setPost(newPost)
+    const [category, setCategories] = useState([]);
+    const getCategories = () => {
+        getAllCategories()
+        .then(category => setCategories(category));
     }
+    useEffect(() => {
+        getCategories()
+    }, []);
+    
+        const handleInputChange = (event) => {
+            const newPost = {...post}
+            let selectedVal = event.target.value
+            newPost[event.target.id] = selectedVal
+            setPost(newPost)
+        }
 
     const handleClickSavePost = (event) => {
         event.preventDefault()
-        if (post.name === "" || post.description === "" || post.price ==="" || post.categoryId === 0){
+        if (post.name === "" || post.description === "" || post.price === "" || post.category?.id === 0){
             window.alert("Please fill in all fields")
         }
         else if (post.price === 0) {
@@ -25,6 +34,7 @@ export const PostEdit = () => {
         }
         
         else {
+            post.categoryId = post.category.id
             editPost(post)
             .then(() => history.push('/posts'))
         }
@@ -100,15 +110,23 @@ export const PostEdit = () => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="category">Category: </label>
-                    <input
+                    <select
+                    defaultValue = {post.category?.id}
                     type="number"
-                        value={post.categoryId}
+                        value={post.category?.id}
                         name="categoryId"
                         id="categoryId"
                         onChange={handleInputChange}
                         className="form-control"
                     >
-                    </input>
+                         <option value ="0"> Select a Category</option>
+                {category.map(cat => (
+                   post.category?.id == cat.id ? 
+                   <option key ={cat.id} selected value={cat.id}>{cat.name}</option>
+                    : <option key ={cat.id} value={cat.id}>{cat.name} </option>
+                   
+                ))}
+                    </select>
                 </div>
             </fieldset>
             <button className="btn btn-primary" onClick={handleClickSavePost}>Submit Post</button>

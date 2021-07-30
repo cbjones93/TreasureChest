@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import { getAllPosts, searchPosts } from "../../modules/postManager.js";
 import Post from "./Post"
 import { useHistory } from "react-router";
+import {
+    UncontrolledDropdown,
+    DropdownToggle,
+    DropdownMenu,
+  } from 'reactstrap';
+  import CategoryList from '../Category/CategoryList'
 
 
 
@@ -37,6 +43,12 @@ const PostList = (props) => {
     return (
         <>
             {/* <button className="btn btn-primary" onClick={() => history.push("/posts/add")}>Create Post</button> */}
+            <UncontrolledDropdown>
+              <DropdownToggle>Categories</DropdownToggle>
+              <DropdownMenu>
+                <CategoryList />
+              </DropdownMenu>
+              </UncontrolledDropdown>
             <div>
             <form action="/" method="get">
         <label htmlFor="header-search">
