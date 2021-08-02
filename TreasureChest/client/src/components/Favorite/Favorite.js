@@ -4,6 +4,10 @@ import { Card, CardBody } from "reactstrap";
 
 const Favorite = ({ favorite }) => {
     const history = useHistory()
+    const imgStyle = {
+        maxHeight: 128,
+        maxWidth: 128
+      }
     return (
         <Card >
             < CardBody >
@@ -11,7 +15,7 @@ const Favorite = ({ favorite }) => {
                     <strong>{favorite.post.name}</strong>
                 </p>
                 <Link to={`/posts/details/${favorite.post.id}`}>
-             <img src={favorite.post.imageLocation} alt={favorite.post.name} />
+             <img style={imgStyle} src={favorite.post.imageLocation} alt={favorite.post.name} />
              </Link>
              <p>${favorite.post?.price}</p>
             </CardBody >

@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, Container } from "reactstrap";
 import { Link, useHistory } from "react-router-dom";
 import { getUserById } from "../../modules/authManager"
 import { getAllPosts } from "../../modules/postManager";
 import Post from "../Posts/Post";
 import { getFavoritesByUserId } from "../../modules/favoriteManager";
 import Favorite from "../Favorite/Favorite";
+import "./User.css"
+import "../Posts/Post.css"
 
 const MyAccount = (props) => {
     const [myAccount, setMyAccount] = useState({});
     const [favorites, setFavorites] = useState([]);
     const [posts, setPosts] = useState([])
     const history = useHistory();
-
+    const imgStyle = {
+        maxHeight: 128,
+        maxWidth: 128
+      }
     let loggedInUser = props.activeUser
     console.log(props.activeUser)
 
@@ -48,10 +53,12 @@ const MyAccount = (props) => {
 
 
     return (
+       <Container>
         <Card>
             <CardBody>
+                <div className="accountContainer">
                 <h5>Your Account Details</h5>
-                <img src={myAccount.imageLocation} />
+                <img style ={imgStyle} src={myAccount.imageLocation} />
                 <div>
                     <strong>{myAccount.firstName} {myAccount.lastName}</strong>
                     <p>Email: {myAccount.email}</p>
@@ -60,7 +67,8 @@ const MyAccount = (props) => {
                         <Link to={`/myaccount/edit`}>Edit Account</Link>
                     </button>
                 </div>
-                <h5>Items For Sale</h5>
+                <h5 className="headerText">Items For Sale</h5>
+                <div className="postList">
                 {posts.map((post) => {
                     return (
                         <>
@@ -72,19 +80,27 @@ const MyAccount = (props) => {
 
                 })
                 }
-                <h5>Your Purchased Items</h5>
+                </div>
+                <h5 className="headerText">Your Purchased Items</h5>
+                <div className="postList">
                 {posts.map((post) => {
                     return (
                         <>
+                       
                             {post.buyerId === loggedInUser.id &&
                                 <Post post={post} key={post.id} loggedInUser={loggedInUser} />
                             }
+                            
                         </>
                     )
+                    
 
                 })
+                
                 }
-                <h5>Your Saved Items</h5>
+                </div>
+                <h5 className="headerText">Your Saved Items</h5>
+                <div className="postList">
                 {favorites.map((favorite) => {
                     return (
                         <>
@@ -92,8 +108,12 @@ const MyAccount = (props) => {
                         </>
                     )
                 })}
+                </div>
+                </div>
             </CardBody>
         </Card>
+        </Container>
+       
     )
 }
 export default MyAccount

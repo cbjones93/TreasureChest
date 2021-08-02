@@ -5,21 +5,32 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink, 
+  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem
 } from 'reactstrap';
 import { logout } from '../modules/authManager';
+import { Image } from 'cloudinary-react';
+import "./Header.css"
+
+const imgStyle = {
+  maxHeight: 100,
+  maxWidth: 100,
 
 
+
+}
 export default function Header({ isLoggedIn }) {
 
-  
+
   return (
-    <div>
+    <div className="header">
       <Navbar color="light" light expand="md">
+        <div className="headerImg">
+          <Image style={imgStyle} cloudName="dmhi6ysqi" publicId="https://res.cloudinary.com/dmhi6ysqi/image/upload/v1627930687/TreasureChest_vk2fxk.png" />
+        </div>
         <NavbarBrand tag={RRNavLink} to="/">Treasure Chest</NavbarBrand>
 
         <Nav className="mr-auto" navbar>
@@ -36,14 +47,14 @@ export default function Header({ isLoggedIn }) {
           {isLoggedIn &&
             <>
               <NavItem>
-              <NavLink tag={RRNavLink} to="/posts">Posts</NavLink>
+                <NavLink tag={RRNavLink} to="/posts">Posts</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={RRNavLink} to="/myaccount">My Account</NavLink>
               </NavItem>
               <NavItem>
                 <a aria-current="page" className="nav-link"
                   style={{ cursor: "pointer" }} onClick={logout}>Logout</a>
-              </NavItem>
-              <NavItem>
-                <NavLink tag ={RRNavLink} to="/myaccount">My Account</NavLink>
               </NavItem>
             </>
           }

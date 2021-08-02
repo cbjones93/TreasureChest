@@ -6,8 +6,12 @@ import {
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
-  } from 'reactstrap';
-  import CategoryList from '../Category/CategoryList'
+    Row,
+    Form,
+} from 'reactstrap';
+import CategoryList from '../Category/CategoryList'
+import "./Post.css"
+import { Image } from "cloudinary-react"
 
 
 
@@ -18,24 +22,24 @@ const PostList = (props) => {
     const [search, setSearch] = useState([])
 
     let loggedInUser = props.activeUser
-    console.log(loggedInUser) 
+    console.log(loggedInUser)
 
     const getPosts = () => {
         getAllPosts().then(posts => setPosts(posts));
     };
     const handleInputChange = (event) => {
-        const newSearch = {...search}
+        const newSearch = { ...search }
         let selectedVal = event.target.value
         newSearch[event.target.id] = selectedVal
         setSearch(newSearch)
     }
     const searchPost = (event) => {
         event.preventDefault()
-        searchPosts(search.searchparam,true)
-        .then(post => {
-          setPosts(post)
-        })
-      }
+        searchPosts(search.searchparam, true)
+            .then(post => {
+                setPosts(post)
+            })
+    }
     useEffect(() => {
         getPosts();
     }, []);
@@ -43,37 +47,45 @@ const PostList = (props) => {
     return (
         <>
             {/* <button className="btn btn-primary" onClick={() => history.push("/posts/add")}>Create Post</button> */}
-            <UncontrolledDropdown>
-              <DropdownToggle>Categories</DropdownToggle>
-              <DropdownMenu>
-                <CategoryList />
-              </DropdownMenu>
-              </UncontrolledDropdown>
-            <div>
-            <form action="/" method="get">
-        <label htmlFor="header-search">
-            <span className="visually-hidden">Search Posts</span>
-        </label>
-        <input
-            type="text"
-            id="searchparam"
-            placeholder="Search Posts"
-            name="s"
-            onChange={handleInputChange}
-        />
-        <button type="submit" onClick={searchPost}>Search</button>
-    </form>
-                <button onClick={() => history.push(`/createpost`)}> Create Post</button>
-                {posts.map((post) => {
 
-                    return (
-                        <>
-                        {post.isPurchased === false &&
-                        <Post post={post} key={post.id} loggedInUser={loggedInUser} />}
-                        </>
+            <div className="abovePostList">
+            <UncontrolledDropdown>
+                    <DropdownToggle>Categories</DropdownToggle>
+                    <DropdownMenu>
+                        <CategoryList />
+                    </DropdownMenu>
+                </UncontrolledDropdown>
+            <button onClick={() => history.push(`/createpost`)}> Create Post</button>
+                <Form className="form" action="/" method="get">
+                    <div>
+                    <label htmlFor="header-search">
+                        <span className="visually-hidden">Search Posts</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="searchparam"
+                        placeholder="Search Posts"
+                        name="s"
+                        onChange={handleInputChange}
+                    />
+                    </div>
+                    <button type="submit" onClick={searchPost}>Search</button>
+                </Form>
+               
+    
+                <div className="postList">
+                    {posts.map((post) => {
+
+                        return (
+                            <>
+                                {post.isPurchased === false &&
+                                    <Post post={post} key={post.id} loggedInUser={loggedInUser} />}
+                            </>
                         )
-                        
-                })}
+
+                    })}
+                </div>
+
 
             </div>
         </>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, Container } from "reactstrap";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { getUserById } from "../../modules/authManager"
 import { getAllPosts } from "../../modules/postManager";
@@ -7,6 +7,8 @@ import Post from "../Posts/Post";
 import Favorite from "../Favorite/Favorite";
 import { getFavoritesByUserId } from "../../modules/favoriteManager";
 import { addFollow, deleteFollow, getAllFollowsByUserId } from "../../modules/followManager";
+import "./User.css"
+import "../Posts/Post.css"
 
 const UserAccount = (props) => {
     const { id } = useParams();
@@ -17,6 +19,7 @@ const UserAccount = (props) => {
     const [userAccount, setUserAccount] = useState({});
     const [activeUser, setActiveUser] = useState(false);
     const history = useHistory();
+
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -96,49 +99,57 @@ const UserAccount = (props) => {
 
     return (
         <>
-            <Card>
-                <CardBody>
-                    <h5> {userAccount.firstName} {userAccount.lastName}'s Account Page</h5>
-                    <img src={userAccount.imageLocation} />
-                    <div>
-                        <strong></strong>
-                        <p>Email: {userAccount.email}</p>
-                        <p>Address: {userAccount.address} </p>
-                    </div>
-                    {follows === undefined || follows?.length === 0 ?
-                        <button onClick={handleAddFollow}> Follow this user!</button>
-                        :
-                        <></>
-                    }
-                    {follows !== undefined && follows?.length !== 0 ?
-                        <button onClick={() => handleDeleteFollow(follows.id)}>  Unfollow User </button> :
-                        <> </>}
-                    <h5>{userAccount.firstName}'s Items For Sale</h5>
-                    {posts.map((post) => {
-                        return (
-                            <>
-                                {post.user.id === userAccount.id && post.isPurchased !== true &&
-                                    <Post post={post} key={post.id} userAccount={userAccount} />
-                                }
-                            </>
-                        )
+            <Container>
+                <Card>
+                    <CardBody>
+                        <div className="accountContainer">
+                            <h5 className="headerText"> {userAccount.firstName} {userAccount.lastName}'s Account Page</h5>
+                            <img src={userAccount.imageLocation} />
+                            <div>
+                                <strong></strong>
+                                <p>Email: {userAccount.email}</p>
+                                <p>Address: {userAccount.address} </p>
+                            </div>
+                            {follows === undefined || follows?.length === 0 ?
+                                <button onClick={handleAddFollow}> Follow this user!</button>
+                                :
+                                <></>
+                            }
+                            {follows !== undefined && follows?.length !== 0 ?
+                                <button onClick={() => handleDeleteFollow(follows.id)}>  Unfollow User </button> :
+                                <> </>}
+                            
+                            <h5 className="headerText">{userAccount.firstName}'s Items For Sale</h5>
+                            <div className="postList">
+                            {posts.map((post) => {
+                                return (
+                                    <>
+                                        {post.user.id === userAccount.id && post.isPurchased !== true &&
+                                            <Post post={post} key={post.id} userAccount={userAccount} />
+                                        }
+                                    </>
+                                )
 
-                    })
-                    }
-                    <h5>{userAccount.firstName}'s Saved Items</h5>
-                    {favorites.map((favorite) => {
-                        return (
-                            <>
-                                <Favorite favorite={favorite} key={favorite.id} />
-                            </>
-                        )
-                    })}
+                            })
+                            }
+                            </div>
+                            <h5 className="headerText">{userAccount.firstName}'s Saved Items</h5>
+                            <div className="postList">
+                            {favorites.map((favorite) => {
+                                return (
+                                    <>
+                                        <Favorite favorite={favorite} key={favorite.id} />
+                                    </>
+                                )
+                            })}
+                            </div>
 
 
 
-
-                </CardBody>
-            </Card>
+                        </div>
+                    </CardBody>
+                </Card>
+            </Container>
         </>
     )
 }

@@ -83,7 +83,7 @@ const PostForm = () => {
                 <div className="form-group">
                     <label htmlfor="title">Image URL</label>
                     <input
-                        type="text"
+                        type="file"
                         name="imageLocation"
                         id="imageLocation"
                         className="form-control"

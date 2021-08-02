@@ -1,0 +1,14 @@
+
+.logout {
+   justify-content: flex-end;
+}
+.headerImg{
+
+    padding-right: 5px;
+ 
+    padding-left: 5px;
+}
+.myAccountImg{
+    width: 30px;
+    height: 30px;
+}

@@ -31,11 +31,13 @@ const CategoryPostList = () => {
               </UncontrolledDropdown>
             <div>
                 <button onClick={() => history.push(`/createpost`)}> Create Post</button>
+                <div className= "postList">
                 {posts.map((post) => {
 
                     return (
                         <CategoryPost post={post} key={post.id} />)
                 })}
+                </div>
 
             </div>
         </>

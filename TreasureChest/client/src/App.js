@@ -5,6 +5,8 @@ import Header from "./components/Header";
 import ApplicationViews from "./components/ApplicationViews";
 import { onLoginStatusChange } from "./modules/authManager";
 
+var CLOUDINARY_API = "https://api.cloudinary.com/v1_1/dmhi6ysqi/image/upload"
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 

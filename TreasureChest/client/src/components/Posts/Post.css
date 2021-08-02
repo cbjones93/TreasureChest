@@ -1,0 +1,19 @@
+.postList {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.form{
+    display: flex;
+    justify-content: center;
+}
+.post {
+    display:flex;
+    flex-direction: row;
+}
+.container{
+    display: flex;
+    justify-content: center;
+}
