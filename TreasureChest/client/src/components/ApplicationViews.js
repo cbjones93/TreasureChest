@@ -12,6 +12,7 @@ import MyAccount from "./User/myAccountCard";
 import UserAccount from "./User/userAccountCard"
 import { UserEdit } from "./User/myAccountEditForm";
 import CategoryPostList from "./Category/CategoryPostList";
+import Home from "./Home";
 
 export default function ApplicationViews({ isLoggedIn }) {
   const [activeUser, setActiveUser] = useState({});
@@ -39,7 +40,7 @@ export default function ApplicationViews({ isLoggedIn }) {
           {isLoggedIn ? <PostList /> : <Redirect to="/login" />}
         </Route> */}
           <Route path="/" exact>
-            <div> Hello! </div>
+           <Home activeUser={activeUser} />
           </Route>
 
           <Route path="/posts" exact>

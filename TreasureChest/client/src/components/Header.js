@@ -27,17 +27,17 @@ export default function Header({ isLoggedIn }) {
 
   return (
     <div className="header">
-      <Navbar color="light" light expand="md">
+      <Navbar style={{backgroundColor: 'rgb(18 19 30)'}} light expand="md">
         <div className="headerImg">
           <Image style={imgStyle} cloudName="dmhi6ysqi" publicId="https://res.cloudinary.com/dmhi6ysqi/image/upload/v1627930687/TreasureChest_vk2fxk.png" />
         </div>
-        <NavbarBrand tag={RRNavLink} to="/">Treasure Chest</NavbarBrand>
+        <NavbarBrand className="text-white" tag={RRNavLink} to="/">Treasure Chest</NavbarBrand>
 
         <Nav className="mr-auto" navbar>
           { /* When isLoggedIn === true, we will render the Home link */}
           {isLoggedIn &&
             <NavItem>
-              <NavLink tag={RRNavLink} to="/">Home</NavLink>
+              <NavLink className="text-white" tag={RRNavLink} to="/">Home</NavLink>
             </NavItem>
           }
         </Nav>
@@ -47,13 +47,13 @@ export default function Header({ isLoggedIn }) {
           {isLoggedIn &&
             <>
               <NavItem>
-                <NavLink tag={RRNavLink} to="/posts">Posts</NavLink>
+                <NavLink className="text-white" tag={RRNavLink} to="/posts">Posts</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink tag={RRNavLink} to="/myaccount">My Account</NavLink>
+                <NavLink className="text-white" tag={RRNavLink} to="/myaccount">My Account</NavLink>
               </NavItem>
               <NavItem>
-                <a aria-current="page" className="nav-link"
+                <a aria-current="page" className="nav-link text-white"
                   style={{ cursor: "pointer" }} onClick={logout}>Logout</a>
               </NavItem>
             </>
@@ -61,10 +61,10 @@ export default function Header({ isLoggedIn }) {
           {!isLoggedIn &&
             <>
               <NavItem>
-                <NavLink tag={RRNavLink} to="/login">Login</NavLink>
+                <NavLink className="text-white" tag={RRNavLink} to="/login">Login</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink tag={RRNavLink} to="/register">Register</NavLink>
+                <NavLink className="text-white" tag={RRNavLink} to="/register">Register</NavLink>
               </NavItem>
             </>
           }
