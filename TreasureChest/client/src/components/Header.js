@@ -5,61 +5,54 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink, 
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
+  NavLink
 } from 'reactstrap';
 import { logout } from '../modules/authManager';
-import CategoryList from './Category/CategoryList';
+import { Image } from 'cloudinary-react';
+import "./Header.css"
 
+const imgStyle = {
+  maxHeight: 100,
+  maxWidth: 100,
+}
 export default function Header({ isLoggedIn }) {
 
-  
+
   return (
-    <div>
-      <Navbar color="light" light expand="md">
-        <NavbarBrand tag={RRNavLink} to="/">Treasure Chest</NavbarBrand>
+    <div className="header">
+      <Navbar style={{backgroundColor: 'rgb(18 19 30)'}} light expand="md">
+        <div className="headerImg">
+          <Image style={imgStyle} cloudName="dmhi6ysqi" publicId="https://res.cloudinary.com/dmhi6ysqi/image/upload/v1627930687/TreasureChest_vk2fxk.png" />
+        </div>
+        <NavbarBrand className="text-white" tag={RRNavLink} to="/">Treasure Chest</NavbarBrand>
 
         <Nav className="mr-auto" navbar>
-          { /* When isLoggedIn === true, we will render the Home link */}
           {isLoggedIn &&
             <NavItem>
-              <NavLink tag={RRNavLink} to="/">Home</NavLink>
+              <NavLink className="text-white" tag={RRNavLink} to="/">Home</NavLink>
             </NavItem>
           }
-        </Nav>
-
-
-        <Nav navbar>
           {isLoggedIn &&
             <>
               <NavItem>
-              <NavLink tag={RRNavLink} to="/posts">Posts</NavLink>
+                <NavLink className="text-white" tag={RRNavLink} to="/posts">Posts</NavLink>
               </NavItem>
-              <UncontrolledDropdown>
-              <DropdownToggle>Categories</DropdownToggle>
-              <DropdownMenu>
-                <CategoryList />
-              </DropdownMenu>
-              </UncontrolledDropdown>
               <NavItem>
-                <a aria-current="page" className="nav-link"
+                <NavLink className="text-white" tag={RRNavLink} to="/myaccount">My Account</NavLink>
+              </NavItem>
+              <NavItem >
+                <a aria-current="page" className="nav-link text-white"
                   style={{ cursor: "pointer" }} onClick={logout}>Logout</a>
-              </NavItem>
-              <NavItem>
-                <NavLink tag ={RRNavLink} to="/myaccount">My Account</NavLink>
               </NavItem>
             </>
           }
           {!isLoggedIn &&
             <>
               <NavItem>
-                <NavLink tag={RRNavLink} to="/login">Login</NavLink>
+                <NavLink className="text-white" tag={RRNavLink} to="/login">Login</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink tag={RRNavLink} to="/register">Register</NavLink>
+                <NavLink className="text-white" tag={RRNavLink} to="/register">Register</NavLink>
               </NavItem>
             </>
           }

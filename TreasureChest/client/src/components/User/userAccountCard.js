@@ -1,41 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody } from "reactstrap";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Card, CardBody, Container, Button } from "reactstrap";
+import {  useParams } from "react-router-dom";
 import { getUserById } from "../../modules/authManager"
 import { getAllPosts } from "../../modules/postManager";
 import Post from "../Posts/Post";
 import Favorite from "../Favorite/Favorite";
 import { getFavoritesByUserId } from "../../modules/favoriteManager";
 import { addFollow, deleteFollow, getAllFollowsByUserId } from "../../modules/followManager";
+import "./User.css"
+import "../Posts/Post.css"
 
 const UserAccount = (props) => {
     const { id } = useParams();
     const [follows, setFollows] = useState([]);
     const [posts, setPosts] = useState([])
     const [favorites, setFavorites] = useState([]);
-    const [isFollowed, setIsFollowed] = useState(false)
+
     const [userAccount, setUserAccount] = useState({});
-    const history = useHistory();
+    const [activeUser, setActiveUser] = useState(false);
+    const imgStyle = {
+        maxHeight: 128,
+        maxWidth: 128
+      }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
 
     const handleDeleteFollow = (id) => {
         if (window.confirm(`Are you sure you want to remove ${userAccount.firstName} ${userAccount.lastName} From your favorite sellers?`)) {
             deleteFollow(id)
-            .then(getFollows())
+                .then(getFollows())
         }
         else {
         }
     }
-    const handleAddFollow = () => {  
+    const handleAddFollow = () => {
         const newUserObject = {
             "userId": id,
         }
         addFollow(newUserObject)
-        .then(getFollows())
-        
+            .then(getFollows())
+
     }
     let loggedInUser = props.activeUser
-    console.log(loggedInUser)
-    console.log(follows)
+ 
 
 
     const getPosts = () => {
@@ -50,10 +60,13 @@ const UserAccount = (props) => {
             .then(account => setUserAccount(account));
     }
     const getFollows = () => {
-        getAllFollowsByUserId(props.activeUser.id)
-            .then(follow => {
-                let filteredFollows = follow.find((follow => follow.user.id !== id && follow.user.id !== loggedInUser.id))
-                setFollows(filteredFollows);
+        sleep(300)
+            .then(() => {
+                getAllFollowsByUserId(props.activeUser.id)
+                    .then(follow => {
+                        let filteredFollows = follow.find((follow => follow.user.id == id && follow.currentUserId === loggedInUser.id))
+                        setFollows(filteredFollows);
+                    })
             })
 
     };
@@ -68,11 +81,15 @@ const UserAccount = (props) => {
         if (props.activeUser.id !== undefined) {
             getFollows()
         }
-    }, [userAccount]);
+        if (props.activeUser.id === undefined) {
+            setActiveUser(!activeUser)
+        }
+    }, [userAccount, activeUser]);
 
     useEffect(() => {
         getPosts();
     }, []);
+
     useEffect(() => {
         getUser();
     }, []);
@@ -84,49 +101,61 @@ const UserAccount = (props) => {
 
     return (
         <>
-            <Card>
-                <CardBody>
-                    <h5> {userAccount.firstName} {userAccount.lastName}'s Account Page</h5>
-                    <img src={userAccount.imageLocation} />
-                    <div>
-                        <strong></strong>
-                        <p>Email: {userAccount.email}</p>
-                        <p>Address: {userAccount.address} </p>
-                    </div>
-                    {follows === undefined ?
-                        <button onClick={handleAddFollow}> Follow this user!</button>
-                        :
-                     <></>
-                    }
-                    {follows !== undefined ?
-                    <button onClick={() => handleDeleteFollow(follows.id)}>  Unfollow User </button> :
-                    <> </> }
-                    <h5>{userAccount.firstName}'s Items For Sale</h5>
-                    {posts.map((post) => {
-                        return (
-                            <>
-                                {post.user.id === userAccount.id && post.isPurchased !== true &&
-                                    <Post post={post} key={post.id} userAccount = {userAccount} />
-                                }
-                            </>
-                        )
+            <Container>
+                <Card>
+                    <CardBody>
+                     
+                            <h5 className="headerText"> {userAccount.firstName} {userAccount.lastName}'s Account Page</h5>
+                            <img style={imgStyle} src={userAccount.imageLocation} />
+                            <div>
+                                <strong></strong>
+                                <p>Email: {userAccount.email}</p>
+                                <p>Address: {userAccount.address} </p>
+                            </div>
+                            {(follows === undefined || follows?.length === 0) && (loggedInUser.id !== userAccount.id) ?
+                                <Button onClick={handleAddFollow}> Follow this user!</Button>
+                                :
+                                <></>
+                            }
+                            {follows !== undefined && follows?.length !== 0 ?
+                                <Button onClick={() => handleDeleteFollow(follows.id)}>  Unfollow User </Button> :
+                                <> </>}
+                                </CardBody>
+                            </Card>
+                            <Card>
+                                <CardBody>
+ 
+                            <h5 className="headerText">{userAccount.firstName}'s Items For Sale</h5>
+                            <div className="postList">
+                            {posts.map((post) => {
+                                return (
+                                    <>
+                                        {post.user.id === userAccount.id && post.isPurchased !== true &&
+                                            <Post post={post} key={post.id} userAccount={userAccount} />
+                                        }
+                                    </>
+                                )
 
-                    })
-                    }
-                    <h5>{userAccount.firstName}'s Saved Items</h5>
-                    {favorites.map((favorite) => {
-                        return (
-                            <>
-                                <Favorite favorite={favorite} key={favorite.id} />
-                            </>
-                        )
-                    })}
-                
+                            })
+                            }
+                            </div>
+                            <h5 className="headerText">{userAccount.firstName}'s Saved Items</h5>
+                            <div className="postList">
+                            {favorites.map((favorite) => {
+                                return (
+                                    <>
+                                        <Favorite favorite={favorite} key={favorite.id} />
+                                    </>
+                                )
+                            })}
+                            </div>
+
+
+
                         
-
-
-                </CardBody>
-        </Card>
+                    </CardBody>
+                </Card>
+            </Container>
         </>
     )
 }

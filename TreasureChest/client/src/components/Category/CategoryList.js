@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+
 import Category from "./Category";
+
 import { getAllCategories } from "../../modules/categoryManager";
 
 const CategoryList = (props) => {
     const [categories, setCategories] = useState([]);
-    const history = useHistory();
+
 
     let loggedInUser = props.activeUser
-    console.log(loggedInUser) 
+    
 
     const getCategories = () => {
         getAllCategories()

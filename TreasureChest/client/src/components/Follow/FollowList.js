@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+
 import Follow from "./Follow";
 import { getAllFollows } from "../../modules/followManager";
+import { CardBody, Container, Card } from "reactstrap";
+
 
 const FollowList = (props) => {
     const [follows, setFollows] = useState([]);
-    const history = useHistory();
+
 
  
     const getFollows = () => {
@@ -14,14 +16,16 @@ const FollowList = (props) => {
     };
 
     let loggedInUser = props.activeUser
-    console.log(loggedInUser) 
+  
 
     useEffect(() => {
         getFollows()
     }, []);
 
     return (
-        <>
+        <Container>
+            <Card>
+                <CardBody>
                 <h5> Your Favorite Sellers</h5>
             {follows.map((follow => {
                 return (
@@ -31,7 +35,9 @@ const FollowList = (props) => {
                     />
                 )
             }))}
-        </>
+            </CardBody>
+            </Card>
+        </Container>
     )
 }
 export default FollowList

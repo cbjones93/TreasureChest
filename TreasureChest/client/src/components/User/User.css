@@ -1,0 +1,9 @@
+.accountContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.headerText{
+    text-align: center;
+}

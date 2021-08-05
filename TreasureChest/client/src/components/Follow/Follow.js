@@ -1,15 +1,18 @@
 import React from "react";
 import { Card, CardBody } from "reactstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 const Follow = ({ follow, loggedInUser }) => {
-    console.log(follow.currentUserId)
-    const history = useHistory()
+    const imgStyle = {
+        maxHeight: 128,
+        maxWidth: 128
+      }
     if (loggedInUser?.id === follow.currentUserId) {
         return (
-            <Card >
+            <Card className="follow" style={{ width: '18rem' }} >
                 < CardBody >
-                    <img src={follow.user.imageLocation} />
+                    <img style={imgStyle} src={follow.user.imageLocation} />
                     <div>
                         <Link to={`../../users/${follow.user.id}`}>
                             <strong>{follow.user.firstName} {follow.user.lastName}</strong>

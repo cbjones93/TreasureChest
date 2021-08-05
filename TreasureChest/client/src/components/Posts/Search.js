@@ -22,6 +22,9 @@ export const Search = () => {
             })
             setSearch(searchMatch)
         }
+        else if (searchInput == 0) {
+            getPosts()
+        }
         else {
             getPosts()
         }
