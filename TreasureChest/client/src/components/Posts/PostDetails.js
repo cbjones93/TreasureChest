@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardBody, Container } from "reactstrap";
+import { Card, CardBody, Container, Button } from "reactstrap";
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { getPostById } from "../../modules/postManager.js";
@@ -17,12 +17,10 @@ const PostDetail = (props) => {
     const [favorites, setFavorites] = useState([]);
     const history = useHistory();
 
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
+ 
 
     let loggedInUser = props.activeUser
-    console.log(loggedInUser)
+
 
     const getFavorites = () => {
         getFavoritesByUserId(loggedInUser.id)
@@ -78,8 +76,7 @@ const PostDetail = (props) => {
     }, [loggedInUser]);
 
 
-    console.log(favorites)
-    console.log(post)
+ 
 
     return (
         <Container className="themed-container">
@@ -97,21 +94,21 @@ const PostDetail = (props) => {
                         <p>Category: {post.category?.name}</p>
                         {post.sellerId === props.activeUser.id &&
                             <>
-                                <button className="buttonRemovePost" type="button" onClick={() => handleDeletePost(post.id)}>Delete Post</button>
-                                <button onClick={() => history.push(`/posts/edit/${post.id}`)}> Edit</button>
+                                <Button className="buttonRemovePost" type="button" onClick={() => handleDeletePost(post.id)}>Delete Post</Button>
+                                <Button onClick={() => history.push(`/posts/edit/${post.id}`)}> Edit</Button>
                             </>
                         }
                         {post.sellerId !== props.activeUser.id && post.isPurchased !== true &&
                             <>
-                                <button className="buttonBuyPost" type="button" onClick={() => handleBuyPost(post.id)}>Buy {post.name}</button>
+                                <Button className="buttonBuyPost" type="button" onClick={() => handleBuyPost(post.id)}>Buy {post.name}</Button>
                             </>
                         }
                         {post.isPurchased === false && post.sellerId !== props.activeUser.id ?
                             favorites === undefined
                                 ?
-                                <button className="buttonFavoritePost" type="button" onClick={() => handleFavoritePost(post.id)}>Save {post.name}</button>
+                                <Button className="buttonFavoritePost" type="button" onClick={() => handleFavoritePost(post.id)}>Save {post.name}</Button>
                                 :
-                                <button className="buttonRemoveFavorite" type="button" onClick={() => handleDeleteFavorite(favorites.id)}>Remove {post.name} From Favorites</button>
+                                <Button className="buttonRemoveFavorite" type="button" onClick={() => handleDeleteFavorite(favorites.id)}>Remove {post.name} From Favorites</Button>
                             :
                             null
                         }

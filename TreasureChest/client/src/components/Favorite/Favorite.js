@@ -1,9 +1,9 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Card, CardBody } from "reactstrap";
 
 const Favorite = ({ favorite }) => {
-    const history = useHistory()
+  
     const imgStyle = {
         maxHeight: 128,
         maxWidth: 128

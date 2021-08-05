@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, CardBody, Media } from "reactstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Card, CardBody } from "reactstrap";
+import { Link } from "react-router-dom";
 import "./Post.css"
 
 
@@ -9,7 +9,8 @@ const Post = ({ post, loggedInUser, userAccount }) => {
         maxHeight: 128,
         maxWidth: 128
       }
-    const history = useHistory()
+
+
     return (
         <Card className = "post" style={{ width: '18rem' }}>
             < CardBody >

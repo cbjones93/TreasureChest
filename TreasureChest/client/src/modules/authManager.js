@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
-import { useHistory } from "react-router";
+
 
 const _apiUrl = "/api/user";
 

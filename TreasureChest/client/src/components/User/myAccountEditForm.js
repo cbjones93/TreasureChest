@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { Form } from "reactstrap";
+import { useHistory } from "react-router";
 import { editUser, getUserById } from "../../modules/authManager";
 
 export const UserEdit = (props) => {
@@ -39,7 +40,8 @@ export const UserEdit = (props) => {
     }
 
     return (
-        <form className="postForm">
+        
+        <Form className="ml-5 text-white ">
         <h2 className="postForm_title">Edit Account</h2>
         <fieldset>
             <div className="form-group">
@@ -119,6 +121,6 @@ export const UserEdit = (props) => {
       
         <button className="btn btn-primary" onClick={handleClickSaveUser}>Save Changes</button>
         <button className="btn btn-primary" onClick={handleCancelSave}>Cancel</button>
-    </form>
+    </Form>
     )
 }

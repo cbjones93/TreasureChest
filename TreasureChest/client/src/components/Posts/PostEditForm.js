@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { Form, FormGroup, Button, Container } from "reactstrap";
+import { Form } from "reactstrap";
 import { editPost, getPostById } from "../../modules/postManager";
 import { getAllCategories } from "../../modules/categoryManager";
 
@@ -47,7 +47,7 @@ export const PostEdit = () => {
         getPostById(id).then(setPost)
     }, [id])
     return (
-        <form className="postForm">
+        <Form className="postForm text-white">
             <h2 className="postForm_title">New Post</h2>
             <fieldset>
                 <div className="form-group">
@@ -131,7 +131,7 @@ export const PostEdit = () => {
             </fieldset>
             <button className="btn btn-primary" onClick={handleClickSavePost}>Submit Post</button>
             <button className="btn btn-primary" onClick={handleCancelSave}>Cancel</button>
-        </form>
+        </Form>
     )
 }
 

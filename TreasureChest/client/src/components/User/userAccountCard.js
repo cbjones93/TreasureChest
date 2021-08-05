@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, Container } from "reactstrap";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Card, CardBody, Container, Button } from "reactstrap";
+import {  useParams } from "react-router-dom";
 import { getUserById } from "../../modules/authManager"
 import { getAllPosts } from "../../modules/postManager";
 import Post from "../Posts/Post";
@@ -15,10 +15,13 @@ const UserAccount = (props) => {
     const [follows, setFollows] = useState([]);
     const [posts, setPosts] = useState([])
     const [favorites, setFavorites] = useState([]);
-    const [isFollowed, setIsFollowed] = useState(false)
+
     const [userAccount, setUserAccount] = useState({});
     const [activeUser, setActiveUser] = useState(false);
-    const history = useHistory();
+    const imgStyle = {
+        maxHeight: 128,
+        maxWidth: 128
+      }
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -42,8 +45,7 @@ const UserAccount = (props) => {
 
     }
     let loggedInUser = props.activeUser
-    console.log(loggedInUser)
-    console.log(follows)
+ 
 
 
     const getPosts = () => {
@@ -102,23 +104,27 @@ const UserAccount = (props) => {
             <Container>
                 <Card>
                     <CardBody>
-                        <div className="accountContainer">
+                     
                             <h5 className="headerText"> {userAccount.firstName} {userAccount.lastName}'s Account Page</h5>
-                            <img src={userAccount.imageLocation} />
+                            <img style={imgStyle} src={userAccount.imageLocation} />
                             <div>
                                 <strong></strong>
                                 <p>Email: {userAccount.email}</p>
                                 <p>Address: {userAccount.address} </p>
                             </div>
-                            {follows === undefined || follows?.length === 0 ?
-                                <button onClick={handleAddFollow}> Follow this user!</button>
+                            {(follows === undefined || follows?.length === 0) && (loggedInUser.id !== userAccount.id) ?
+                                <Button onClick={handleAddFollow}> Follow this user!</Button>
                                 :
                                 <></>
                             }
                             {follows !== undefined && follows?.length !== 0 ?
-                                <button onClick={() => handleDeleteFollow(follows.id)}>  Unfollow User </button> :
+                                <Button onClick={() => handleDeleteFollow(follows.id)}>  Unfollow User </Button> :
                                 <> </>}
-                            
+                                </CardBody>
+                            </Card>
+                            <Card>
+                                <CardBody>
+ 
                             <h5 className="headerText">{userAccount.firstName}'s Items For Sale</h5>
                             <div className="postList">
                             {posts.map((post) => {
@@ -146,7 +152,7 @@ const UserAccount = (props) => {
 
 
 
-                        </div>
+                        
                     </CardBody>
                 </Card>
             </Container>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { createPost } from "../../modules/postManager";
 import { getAllCategories } from "../../modules/categoryManager";
+import { Form } from "reactstrap";
 
 const PostForm = () => {
     const [post, setPost] = useState({
@@ -47,7 +48,7 @@ const PostForm = () => {
 
 
     return (
-        <form className="postForm">
+        <Form className="postForm text-white">
             <h2 className="postForm_title">New Post</h2>
             <fieldset>
                 <div className="form-group">
@@ -83,7 +84,7 @@ const PostForm = () => {
                 <div className="form-group">
                     <label htmlfor="title">Image URL</label>
                     <input
-                        type="file"
+                        type="text"
                         name="imageLocation"
                         id="imageLocation"
                         className="form-control"
@@ -127,7 +128,7 @@ const PostForm = () => {
             </fieldset>
             <button className="btn btn-primary" onClick={handleClickSavePost}>Submit Post</button>
             <button className="btn btn-primary" onClick={handleCancelSave}>Cancel</button>
-        </form>
+        </Form>
     )
 }
 

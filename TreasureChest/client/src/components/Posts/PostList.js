@@ -6,23 +6,23 @@ import {
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
-    Row,
     Form,
+    Button,
+    Input,
 } from 'reactstrap';
 import CategoryList from '../Category/CategoryList'
 import "./Post.css"
-import { Image } from "cloudinary-react"
+
 
 
 
 const PostList = (props) => {
-    const [myAccount, setMyAccount] = useState({});
     const [posts, setPosts] = useState([]);
     const history = useHistory();
     const [search, setSearch] = useState([])
 
     let loggedInUser = props.activeUser
-    console.log(loggedInUser)
+
 
     const getPosts = () => {
         getAllPosts().then(posts => setPosts(posts));
@@ -50,26 +50,27 @@ const PostList = (props) => {
 
             <div className="abovePostList">
             <UncontrolledDropdown>
-                    <DropdownToggle>Categories</DropdownToggle>
+                    <DropdownToggle className= "btn btn-dark">Categories</DropdownToggle>
                     <DropdownMenu>
                         <CategoryList />
                     </DropdownMenu>
                 </UncontrolledDropdown>
-            <button onClick={() => history.push(`/createpost`)}> Create Post</button>
+            <Button  className= "btn btn-dark" onClick={() => history.push(`/createpost`)}> Create Post</Button>
                 <Form className="form" action="/" method="get">
-                    <div>
+                    
                     <label htmlFor="header-search">
                         <span className="visually-hidden">Search Posts</span>
                     </label>
-                    <input
+                    <Input
+                    style = {{width:"50%", height:"50%" }}
                         type="text"
                         id="searchparam"
                         placeholder="Search Posts"
                         name="s"
                         onChange={handleInputChange}
                     />
-                    </div>
-                    <button type="submit" onClick={searchPost}>Search</button>
+                    <Button type="submit"  className= "btn btn-dark" onClick={searchPost}>Search</Button>
+                    
                 </Form>
                
     

@@ -23,7 +23,7 @@ export default function ApplicationViews({ isLoggedIn }) {
       getCurrentUser()
         .then((user) => {
           setActiveUser(user)
-          console.log(user)
+         
          
         }
         )}
@@ -53,7 +53,7 @@ export default function ApplicationViews({ isLoggedIn }) {
 
           <Route path="/myaccount" exact>
             {isLoggedIn ? <MyAccount activeUser={activeUser} /> : <Redirect to="/login" />}
-            {isLoggedIn ? <FollowList activeUser={activeUser} /> : <Redirect to="/login" />}
+            
           </Route>
 
           <Route path="/myaccount/edit">
